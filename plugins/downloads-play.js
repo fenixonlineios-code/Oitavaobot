@@ -3,9 +3,9 @@ import yts from "yt-search"
 import { spawn } from "child_process"
 import fs from "fs"
 
-const handler = async (m, { conn, text, command }) => {
+const handler = async (m, { conn, text, command, usedPrefix }) => {
   try {
-    if (!text) return m.reply('▶️ Escribe el nombre o link del video', m, rcanal)
+    if (!text) return m.reply('▶️ Escreva o nome ou link do vídeo')
 
     await m.react('🎶')
 
@@ -14,21 +14,51 @@ const handler = async (m, { conn, text, command }) => {
 
     const search = await yts(query)
     const video = search.videos[0]
-    if (!video) throw 'No se encontró nada'
+    if (!video) throw 'Nada encontrado'
 
     const { title, url, thumbnail, timestamp, views, ago, author } = video
 
-    await conn.sendMessage(m.chat, {
-      image: { url: thumbnail },
-      caption: `🌳 *Título:* ${title}
-> 🍄 *Canal:* ${author.name || 'Desconocido'}
-> 🥦 *Vistas:* ${formatViews(views)}
-> ⏳ *Duración:* ${timestamp}
+    const caption = `🌳 *Título:* ${title}
+> 🍄 *Canal:* ${author.name || 'Desconhecido'}
+> 🥦 *Visualizações:* ${formatViews(views)}
+> ⏳ *Duração:* ${timestamp}
 > 🌾 *Publicado:* ${ago}
-> 🍓 *Link:* ${url}`, ...fake
-    }, { quoted: m })
+> 🍓 *Link:* ${url}`
 
-    const isAudio = ['play', 'audio'].includes(command)
+    // /play só mostra prévia + botões
+    if (command === 'play') {
+      await conn.sendMessage(m.chat, {
+        image: { url: thumbnail },
+        caption: `${caption}
+
+Escolha abaixo o formato para baixar:`,
+        footer: 'OITAVÃO BOT',
+        buttons: [
+          {
+            buttonId: `${usedPrefix}audio ${url}`,
+            buttonText: { displayText: '🎧 Áudio' },
+            type: 1
+          },
+          {
+            buttonId: `${usedPrefix}video ${url}`,
+            buttonText: { displayText: '🎬 Vídeo' },
+            type: 1
+          },
+          {
+            buttonId: `${usedPrefix}menu descargas`,
+            buttonText: { displayText: '⬇️ Downloads' },
+            type: 1
+          }
+        ],
+        headerType: 4
+      }, { quoted: m })
+
+      await m.react('✔️')
+      return
+    }
+
+    // /audio e /video baixam de verdade
+    const isAudio = command === 'audio'
     const formato = isAudio ? '128k' : '480p'
 
     await m.react(isAudio ? '🎧' : '🎬')
@@ -37,19 +67,30 @@ const handler = async (m, { conn, text, command }) => {
     const fileName = yt.sanitize(data.filename || title)
 
     const r = await fetch(data.url)
+    if (!r.ok) throw 'Erro ao baixar arquivo'
+
     const buffer = Buffer.from(await r.arrayBuffer())
 
     if (isAudio) {
       await conn.sendMessage(
         m.chat,
-        { audio: buffer, mimetype: 'audio/mpeg', fileName: `${fileName}.mp3` },
+        {
+          audio: buffer,
+          mimetype: 'audio/mpeg',
+          fileName: `${fileName}.mp3`
+        },
         { quoted: m }
       )
     } else {
       const fixed = await faststart(buffer)
       await conn.sendMessage(
         m.chat,
-        { video: fixed, mimetype: 'video/mp4', fileName: `${fileName}.mp4` },
+        {
+          video: fixed,
+          mimetype: 'video/mp4',
+          fileName: `${fileName}.mp4`,
+          caption: `🎥 *${title}*`
+        },
         { quoted: m }
       )
     }
@@ -59,15 +100,14 @@ const handler = async (m, { conn, text, command }) => {
   } catch (e) {
     console.error(e)
     await m.react('❌')
-    m.reply('⚠️ Error al descargar')
+    m.reply('⚠️ Erro ao baixar')
   }
 }
 
-handler.command = ['play', 'audio', 'video', 'play2']
+handler.command = ['play', 'audio', 'video']
 handler.help = handler.command
 handler.tags = ['download']
 export default handler
-
 
 function formatViews(v) {
   if (!v) return 'N/A'
@@ -76,7 +116,6 @@ function formatViews(v) {
   if (v >= 1e3) return (v / 1e3).toFixed(1) + 'K'
   return v.toString()
 }
-
 
 const yt = {
   static: Object.freeze({
@@ -125,7 +164,7 @@ const yt = {
     })
 
     const j = await r.json()
-    if (!j?.url) throw 'No se pudo convertir'
+    if (!j?.url) throw 'Não foi possível converter'
     return j
   }
 }

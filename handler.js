@@ -1,3 +1,4 @@
+import axios from "axios"
 import { smsg } from "./lib/simple.js"
 import { format } from "util"
 import { fileURLToPath } from "url"
@@ -27,9 +28,37 @@ m = smsg(this, m) || m
 if (!m) return
 m.exp = 0
 try {
-const user = global.db.data.users[m.sender]
+let user = global.db.data.users[m.sender]
+
 if (typeof user !== "object") {
-global.db.data.users[m.sender] = {}
+  user = global.db.data.users[m.sender] = {}
+}
+// cria campo registered se não existir
+if (!("registered" in user)) user.registered = false
+
+// detectar comando
+const prefix = /^[./#!]/.test(m.text) ? m.text.match(/^[./#!]/)[0] : '.'
+const isCmd = m.text && m.text.startsWith(prefix)
+const command = isCmd
+  ? m.text.slice(prefix.length).trim().split(' ')[0].toLowerCase()
+  : ''
+
+// comandos liberados sem registro
+const comandosFree = ['registro', 'reg', 'menu']
+
+// bloqueio
+if (isCmd && !user.registered && !comandosFree.includes(command)) {
+  return this.sendMessage(m.chat, {
+    text: `🌿 *Acesso restrito*
+
+Você ainda não está registrado.
+
+🪪 Use:
+.registro Nome.Idade
+
+🍃 Exemplo:
+.registro Pietro.17`
+  }, { quoted: m })
 }
 if (user) {
 if (!("name" in user)) user.name = m.name
@@ -219,6 +248,13 @@ continue
 }}
 if (typeof plugin !== "function") {
 continue
+}
+if (m.message?.buttonsResponseMessage?.selectedButtonId) {
+  m.text = m.message.buttonsResponseMessage.selectedButtonId
+}
+
+if (m.message?.listResponseMessage?.singleSelectReply?.selectedRowId) {
+  m.text = m.message.listResponseMessage.singleSelectReply.selectedRowId
 }
 if ((usedPrefix = (match[0] || "")[0])) {
 const noPrefix = m.text.replace(usedPrefix, "")

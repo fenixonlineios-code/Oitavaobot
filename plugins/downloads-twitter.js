@@ -1,3 +1,5 @@
+import axios from "axios"
+import cheerio from "cheerio"
 let handler = async (m, { conn, args, text }) => {
 if (!text) {
 return conn.reply(m.chat, `❀ Te faltó el link de una imagen/video de twitter.`, m)
@@ -21,7 +23,7 @@ caption: `❀ Twitter - Download ❀\n\n> 🜸 URL » ${text}`}, { quoted: m })
  await m.react('✔️')
 }} catch (e) {
 await m.react('✖️')
-return conn.reply(m.chat, `⚠︎ Se ha producido un problema.\n> Usa *${usedPrefix}report* para informarlo.\n\n${e.message}`, m)
+return conn.reply(m.chat, `⚠︎ Se ha producido un problema.\n> Usa / para informarlo.\n\n${e.message}`, m)
 }}
 
 handler.command = ["x", "twitter", "xdl"]

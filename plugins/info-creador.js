@@ -2,14 +2,14 @@
 import PhoneNumber from 'awesome-phonenumber';
 
 const handler = async (m, { conn }) => {
-  const name = 'GojoBot - MD | ᥆𝖿𝖿іᥴіᥲᥣ';
-  const numCreador = '51900922660';
-  const empresa = 'ɢᴏᴊᴏ ʙᴏᴛ ɪɴɪᴄ.';
-  const about = '💫 𝑫𝒆𝒔𝒂𝒓𝒓𝒐𝒍𝒍𝒂𝒅𝒐𝒓 𝒐𝒇𝒇𝒊𝒄𝒊𝒂𝒍 𝒅𝒆 𝑮𝒐𝒋𝒐𝑩𝒐𝒕 - 𝑴𝑫';
-  const correo = 'carlosramirezvillanueva30@gmail.com';
-  const web = 'https://CarlosRv.vercel.app/';
+  const name = 'PIPI';
+  const numCreador = '5573981832617';
+  const empresa = 'TPGB';
+  const about = 'Apenas um trambiqueiro querendo ser feliz';
+  const correo = 'pietro@tpgb.online';
+  const web = 'https://tpgb.online/';
   const direccion = 'Tokyo, Japón 🇯🇵';
-  const fotoPerfil = 'https://files.catbox.moe/2vwn2d.jpg';
+  const fotoPerfil = 'https://i.ibb.co/YTTxWkPd/98849e22-dd90-4d5e-8309-f7fc10f824f3.jpg';
 
   const vcard = `
 BEGIN:VCARD
@@ -41,7 +41,7 @@ END:VCARD`.trim();
     contextInfo: {
     mentionedJid: [m.sender],
       externalAdReply: {
-        title: '📌 ƈσɳƚαƈƚσ ԃҽ ɱι ƈɾҽαԃσɾ •💫',
+        title: '📌 Contato do meu criador',
         body: '',
         mediaType: 1,
         thumbnailUrl: fotoPerfil,

@@ -7,8 +7,8 @@ const { generateWAMessageFromContent, prepareWAMessageMedia, proto } = pkg
 
 var handler = m => m
 handler.all = async function (m) { 
-global.canalIdM = ["120363421367237421@newsletter", "120363421367237421@newsletter", "120363405880253341@newsletter"]
-global.canalNombreM = ["⋆｡ﾟ☁︎｡⋆ ɢᴏᴊᴏʙᴏᴛ❄️ | ᴄʜᴀɴɴᴇʟ ᴏғɪᴄɪᴀʟ ⋆｡ﾟ☁︎｡⋆", "☃️ 𝑮𝒐𝒋𝒐𝑩𝒐𝒕 - 𝑴𝑫 | 𝑶𝒇𝒇𝒊𝒄𝒊𝒂𝒍 𝑪𝒉𝒂𝒏𝒏𝒆𝒍 ᯓ🥭", "🍃┇⃟⛩️✧༚◦°𝙲 𝙰 𝚁 𝚂  𝗣𝗛𝗢𝗡𝗞⏤͟͞🇦🇱"]
+global.canalIdM = ["120363428805314777@newsletter", "120363428805314777@newsletter", "120363428805314777@newsletter"]
+global.canalNombreM = ["OITAVÃO CHANNEL / OFICIAL", "OITAVÃO CHANNEL", "OITAVÃO"]
 global.channelRD = await getRandomChannel()
 
 global.d = new Date(new Date + 3600000)
@@ -19,17 +19,17 @@ global.mes = d.toLocaleDateString('es', {month: 'long'})
 global.año = d.toLocaleDateString('es', {year: 'numeric'})
 global.tiempo = d.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true})
 
-var canal = 'https://whatsapp.com/channel/0029VbC34Nt42DchIWA0q11f' 
-var canal2 = 'https://whatsapp.com/channel/0029Vb6l62A5a240y2ClLp1M'
-var comunidad = 'https://whatsapp.com/channel/0029VbC34Nt42DchIWA0q11f'
-var git = 'https://github.com/Shadow-nex'
-var github = 'https://github.com/Carlos13ra/GOJOBOT-MD' 
-var correo = 'shadowcore.xyz@gmail.com'
+var canal = 'https://whatsapp.com/channel/0029Vb7iuxMCXC3KJZfzQy0x'
+var canal2 = 'https://whatsapp.com/channel/0029Vb7iuxMCXC3KJZfzQy0x'
+var comunidad = 'https://chat.whatsapp.com/GRfY85y7LIBITxkLq2MEY4'
+var git = 'https://github.com/upietroguedes'
+var github = 'https://github.com/upietroguedes' 
+var correo = 'pietro@tpgb.online'
 global.redes = [canal, comunidad, git, github, correo].getRandom()
 
 global.nombre = m.pushName || 'Anónimo'
-global.packsticker = `°.⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸.°\n💫 Usuario: ${nombre}\n❄️ Bot: ${botname}\n📆 Fecha: ${fecha}\nⴵ Hora: ${moment.tz('America/Caracas').format('HH:mm:ss')}`
-global.packsticker2 = `\n°.⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸.°\n\n☃️ ${dev}`
+global.packsticker = `°.⎯°\n💫 Usuario: ${nombre}\n Bot: ${botname}\n📆 Data: ${fecha}\nⴵ Hora: ${moment.tz('America/Sao_Paulo').format('HH:mm:ss')}`
+global.packsticker2 = `\n°.⎯⃘̶⎯̸⎯ܴ⎯̶᳞͇ࠝ⎯⃘̶⎯̸.°\n\n☃️ ${dev}`
 
 global.fake = { contextInfo: { isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: channelRD.id, newsletterName: channelRD.name, serverMessageId: -1 }
 }}, { quoted: m }

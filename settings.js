@@ -11,40 +11,40 @@ global.botNumber = "" //Ejemplo: 573218138672
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
-global.owner = ["51963315293", "51963315293", "51963315293"]
-global.suittag = ["51963315293"] 
+global.owner = ["557381832617", "+557381832617", "557381832617"]
+global.suittag = ["5573981832617"] 
 global.prems = []
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
 global.libreria = "Baileys Multi Device"
 global.vs = "^1.8.2 • Latest"
-global.nameqr = "ɢᴏᴊᴏ-ʙᴏᴛ ᴍᴅ"
+global.nameqr = "OitavãoBOT"
 global.sessions = "Sessions/Principal"
 global.jadi = "Sessions/SubBot"
 global.kanekiAIJadibts = true
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
-global.botname = "𖹭  ׄ  ְ 🌱 𝐆𝐨𝐣𝐨𝐁𝐨𝐭-𝐌𝐃 ✩"
-global.textbot = "gσᴊσ вσт ν3 • мα∂є ву ¢αяℓσѕ.яν"
-global.dev = "© ⍴᥆ᥕᥱrᥱძ ᑲᥡ 𝙲𝙰𝚁𝙻𝙾𝚂.𝚁𝚅"
-global.author = "© mᥲძᥱ ᥕі𝗍һ ᑲᥡ ƈαɾʅσʂ.ɾʋ"
-global.etiqueta = "✫ᴄᴀʀʟᴏs ʀᴀᴍɪʀᴇᴢ❄️ ⊹꙰ "
-global.currency = "g᥆𝗍іᥴᥲs"
-global.banner = "https://raw.githubusercontent.com/AkiraDevX/uploads/main/uploads/1767454349524_108341.jpeg"
-global.icono = "https://raw.githubusercontent.com/Dev-lxyz/upload/main/uploads/vdoua.jpeg"
+global.botname = "𖹭  ׄ  OitavãoBOT"
+global.textbot = "OitavãoBOT V3 + Maded bypipi"
+global.dev = "© ⍴᥆ᥕᥱrᥱძ ᑲy TPGB"
+global.author = "© mᥲძᥱ ᥕі𝗍һ TPGB.online"
+global.etiqueta = "PIPI "
+global.currency = "lovely"
+global.banner = "https://i.ibb.co/7xQfvT6s/36277e0b-3221-4089-8cff-13544d965c6c.jpg"
+global.icono = "https://i.ibb.co/YTTxWkPd/98849e22-dd90-4d5e-8309-f7fc10f824f3.jpg"
 global.catalogo = fs.readFileSync('./lib/catalogo.jpg')
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
-global.group = "https://chat.whatsapp.com/IDo5RtlTvyt59hqj7E9O28?mode=wwt"
-global.community = "https://chat.whatsapp.com/IDo5RtlTvyt59hqj7E9O28?mode=wwt"
-global.channel = "https://whatsapp.com/channel/0029VbBGlokA89MliWWv1x16"
-global.github = "https://github.com/Carlos13ra/GOJOBOT-MD"
-global.gmail = "shadowcore.xyz@gmail.com"
+global.group = "https://chat.whatsapp.com/Bxp7gXYWVC0L8pryyMPe59"
+global.community = "https://chat.whatsapp.com/GRfY85y7LIBITxkLq2MEY4"
+global.channel = "https://whatsapp.com/channel/0029Vb7iuxMCXC3KJZfzQy0x"
+global.github = "https://github.com/upietroguedes"
+global.gmail = "pietro@tpgb.online"
 global.ch = {
-ch1: "120363421367237421@newsletter"
+ch1: "120363428805314777@newsletter"
 }
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
@@ -58,6 +58,7 @@ zenzxz: { url: "https://api.zenzxz.my.id", key: null },
 siputzx: { url: "https://api.siputzx.my.id", key: null },
 adonix: { url: "https://api-adonix.ultraplus.click", key: 'shadow.xyz' },
 stellar: { url: "https://api.stellarwa.xyz", key: "this-xyz"},
+tpgb: { url: "https://api.tpgb.online", key: "pie"},
 light: { url: "https://api--shadowcorexyz.replit.app", key: null }
 }
 
