@@ -6,7 +6,7 @@ let sorted = users.sort((a, b) => (b.exp || 0) - (a.exp || 0))
 const page = Math.max(1, Math.min(parseInt(args[0]) || 1, Math.ceil(sorted.length / 10)))
 const startIndex = (page - 1) * 10
 const endIndex = startIndex + 10
-let text = `◢✿ Top de usuarios con más experiencia ✿◤\n\n`
+let text = `◢✿ Top de usuarios com mais experiencia ✿◤\n\n`
 const slice = sorted.slice(startIndex, endIndex)
 for (let i = 0; i < slice.length; i++) {
 const { jid, exp, level } = slice[i]
@@ -15,7 +15,7 @@ text += `✰ ${startIndex + i + 1} » *${name}*\n`
 text += `\t\t❖ XP » *${exp.toLocaleString()}*  ❖ LVL » *${level}*\n`
 }
 text += `\n> • Página *${page}* de *${Math.ceil(sorted.length / 10)}*`
-if (page < Math.ceil(sorted.length / 10)) text += `\n> Para ver la siguiente página » *#leaderboard ${page + 1}*`
+if (page < Math.ceil(sorted.length / 10)) text += `\n> Para ver a proxima página » *#leaderboard ${page + 1}*`
 await conn.reply(m.chat, text.trim(), m, { mentions: conn.parseMention(text) })
 }
 
