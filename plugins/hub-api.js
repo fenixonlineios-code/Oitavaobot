@@ -9,7 +9,7 @@ const API_MAP = {
   javgiga: 'javgiga',
   missav: 'missav',
   eporner: 'eporner',
-  xvideos2: 'xvideos',
+  xvideos: 'xvideos',
   xnxx2: 'xnxx',
   spankbang: 'spankbang',
   xhamster: 'xhamster',
