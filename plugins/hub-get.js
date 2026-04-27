@@ -35,7 +35,7 @@ let handler = async (m, { conn, args }) => {
 }
 
 handler.command = ['hubget']
-handler.tags = ['descargas']
-handler.help = ['hubget <api> <id/link>']
+handler.tags = ['nsfw']
+handler.help = ['hubget <api> <id/link> (apis disponiveis: xvideos, xnxx, pornhub, xhamster, hentaicity e mais)']
 
 export default handler
