@@ -9,8 +9,20 @@ let handler = async (m, { conn, usedPrefix, args }) => {
     let level = userData.level || 0
     let name = await conn.getName(userId)
 
+    const theme = {
+  bot: '🩷',
+  line: '✦',
+  user: '👤',
+  level: '🎟️',
+  exp: '💗',
+  coin: '💰',
+  section: '🍬',
+  cmd: '🌸',
+  footer: '🌺'
+}
+    
     const emojis = {
-      main: '🎄', tools: '🧰', audio: '🎶', group: '🎁',
+      main: '🌷', tools: '🧰', audio: '🎶', group: '🎁',
       owner: '👑', fun: '🎮', info: '📘', internet: '🌐',
       downloads: '⬇️', admin: '🧦', anime: '✨', nsfw: '🚫',
       search: '🔍', sticker: '🖼️', game: '🕹️',
@@ -37,7 +49,7 @@ let handler = async (m, { conn, usedPrefix, args }) => {
 
     if (tag) {
       if (!grupos[tag] || !grupos[tag].length) {
-        return m.reply(`🍂 Não encontrei comandos em *${tag}*.`)
+        return m.reply(`${theme.footer} Não encontrei comandos em *${tag}*.`)
       }
 
       let textoTag = `╭━━ ${emojis[tag] || '⭐'} *${tag.toUpperCase()}* ━━⬣
@@ -47,46 +59,43 @@ ${grupos[tag].map(cmd => `┃ ➩ ${cmd}`).join('\n')}
       return m.reply(textoTag)
     }
 
-    let texto = `🩷 *OITAVÃO BOT*
+    let texto = `
+${theme.line} ── ${theme.bot} OITAVÃO BOT ── ${theme.line}
 
 ${ucapan()} @${userId.split('@')[0]}
 
-👤 Usuário: ${name}
-🎟️ Nível: ${level}
-💗 EXP: ${exp}
-💰 Coins: ${coin}
+┊ ${theme.user} ${name}
+┊ ${theme.level} Lv. ${level}
+┊ ${theme.exp} ${exp} XP
+┊ ${theme.coin} ${coin} Coins
 
-━━━━━━━━━━━━━━
-•🍬 *COMANDOS RÁPIDOS*
-━━━━━━━━━━━━━━
-•|🌸 ${usedPrefix}perfil
-•|🌸 ${usedPrefix}menu
-•|🌸 ${usedPrefix}ping
-•|🌸 ${usedPrefix}owner
-•|🌸 ${usedPrefix}level
-•|🌸 ${usedPrefix}coin
-•|🌸 ${usedPrefix}registro
-•|🌸 ${usedPrefix}search
-•|🌸 ${usedPrefix}play
-•|🌸 ${usedPrefix}sticker
+${theme.line} ── ${theme.section} Rápidos ── ${theme.line}
 
-━━━━━━━━━━━━━━
-•🌺 *Escolha um menu abaixo:*`
+${theme.cmd} ${usedPrefix}perfil     ${theme.cmd} ${usedPrefix}menu  
+${theme.cmd} ${usedPrefix}ping       ${theme.cmd} ${usedPrefix}owner  
+${theme.cmd} ${usedPrefix}level      ${theme.cmd} ${usedPrefix}coin  
+${theme.cmd} ${usedPrefix}registro   ${theme.cmd} ${usedPrefix}search  
+${theme.cmd} ${usedPrefix}play       ${theme.cmd} ${usedPrefix}sticker  
+
+${theme.line} ───────────── ${theme.line}
+
+${theme.footer} Toque em um botão abaixo
+`
 
     await conn.sendMessage(m.chat, {
       image: { url: 'https://i.ibb.co/5W62jvz2/IMG-9525.jpg' },
       gifPlayback: true,
       caption: texto,
-      footer: 'OITAVÃO BOT',
+      footer: '© OITAVÃO BOT',
       buttons: [
-        { buttonId:`${usedPrefix}menu main`, buttonText: { displayText: '🎄 MAIN ' }, type: 1 },
+        { buttonId:`${usedPrefix}menu main`, buttonText: { displayText: '🌷 MAIN ' }, type: 1 },
         { buttonId: `${usedPrefix}menu tools`, buttonText: { displayText: '🧰 TOOLS' }, type: 1 },
         { buttonId: `${usedPrefix}menu2`, buttonText: { displayText: `➡️ MAIS ` }, type: 2 }
       ],
       headerType: 1
     }, { quoted: m })
 
-    await m.react('🍂')
+    await m.react('${theme.footer}')
 
   } catch (err) {
     console.error(err)
