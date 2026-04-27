@@ -71,11 +71,11 @@ ${ucapan()} @${userId.split('@')[0]}
 
 ${theme.line} ── ${theme.section} Rápidos ── ${theme.line}
 
-${theme.cmd} ${usedPrefix}perfil     ${theme.cmd} ${usedPrefix}menu  
-${theme.cmd} ${usedPrefix}ping       ${theme.cmd} ${usedPrefix}owner  
-${theme.cmd} ${usedPrefix}level      ${theme.cmd} ${usedPrefix}coin  
-${theme.cmd} ${usedPrefix}registro   ${theme.cmd} ${usedPrefix}search  
-${theme.cmd} ${usedPrefix}play       ${theme.cmd} ${usedPrefix}sticker  
+|${theme.cmd} • ${usedPrefix}perfil     |${theme.cmd} • ${usedPrefix}menu  
+|${theme.cmd} • ${usedPrefix}ping       |${theme.cmd} • ${usedPrefix}owner  
+|${theme.cmd} • ${usedPrefix}level      |${theme.cmd} • ${usedPrefix}coin  
+|${theme.cmd} • ${usedPrefix}registro   |${theme.cmd} • ${usedPrefix}search  
+|${theme.cmd} • ${usedPrefix}play       |${theme.cmd} • ${usedPrefix}sticker  
 
 ${theme.line} ───────────── ${theme.line}
 
