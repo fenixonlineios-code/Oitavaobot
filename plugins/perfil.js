@@ -1,8 +1,12 @@
 let handler = async (m, { conn }) => {
   let user = global.db.data.users[m.sender]
+  
+  const theme = {
+  footer: '🌺'
+}
 
   if (!user.registered) {
-    return m.reply('🌱 Você precisa se registrar primeiro usando .registro')
+    return m.reply('${theme.footer} Você precisa se registrar primeiro usando .registro')
   }
 
   let nome = user.name || 'Sem nome'
@@ -10,13 +14,13 @@ let handler = async (m, { conn }) => {
   let coins = user.coin || 0
 
   m.reply(
-`🌿 *Seu Perfil*
+`${theme.footer} *Seu Perfil*
 
 🪪 Nome: ${nome}
 🎂 Idade: ${idade}
 💰 Coins: ${coins.toLocaleString()}
 
-🍃 Status: Registrado`)
+${theme.footer} Status: Registrado`)
 }
 
 handler.help = ['perfil']
