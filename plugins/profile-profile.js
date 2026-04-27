@@ -26,9 +26,9 @@ let handler = async (m, { conn, args, usedPrefix }) => {
     user.coin ||= 0
     user.bank ||= 0
     user.commands ||= 0
-    user.description ||= 'Sin descripción :v'
-    user.birth ||= 'Sin especificar :< (#setbirth)'
-    user.genre ||= 'Sin especificar'
+    user.description ||= 'Sem descrição :v'
+    user.birth ||= 'Sem especificar :< (#setbirth)'
+    user.genre ||= 'Sem especificar'
     user.terianx ||= null
     user.terianxGenero ||= null
     user.marry ||= null
