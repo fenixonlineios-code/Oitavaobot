@@ -76,7 +76,7 @@ ${ucapan()} @${userId.split('@')[0]}
     await conn.sendMessage(m.chat, {
       video: { url: 'https://i.ibb.co/XxKphFrJ/88-CD7165-3663-4-CE4-AC23-09-CCD763-A80-F.gif' },
       gifPlayback: true,
-      text: texto,
+      caption: texto,
       footer: 'OITAVÃO BOT',
       buttons: [
         { buttonId:`${usedPrefix}menu main`, buttonText: { displayText: '🎄 MAIN ' }, type: 1 },
