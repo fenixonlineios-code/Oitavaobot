@@ -99,25 +99,25 @@ let handler = async (m, { conn, args, usedPrefix }) => {
         ✨ 𝗣𝗘𝗥𝗙𝗜𝗟  ✨        
 ╚═════════════════════╝
 
-👤 Nombre: *${user.name}*${favLine}
-🖋️ Descripción: _${description}_
+👤 Nome: *${user.name}*${favLine}
+🖋️ Descrição: _${description}_
 
 ──────────────
-🎂 Cumpleaños: ${cumpleanos}
-⚧ Género: ${genero}
-💍 casado: ${casado}
+🎂 Aniversário: ${cumpleanos}
+⚧ Gênero: ${genero}
+💍 Casado: ${casado}
 
 ──────────────
  𝐓𝐇𝐄𝐑𝐈𝐀𝐍
-🔹 Soy Un: ${user.terianx || 'No tiene'}
-🔹 Género: ${
+🔹 Sou Um: ${user.terianx || 'Não-therian'}
+🔹 Gênero: ${
       user.terianxGenero
         ? user.terianxGenero.charAt(0).toUpperCase() + user.terianxGenero.slice(1)
-        : 'No definido'
+        : 'Não Definido'
     }
 
 ──────────────
- 𝐏𝐑𝐎𝐆𝐑𝐄𝐒𝐎
+ 𝐏𝐑𝐎𝐆𝐑𝐄𝐒𝐒𝐎
 ⭐ Nivel: ${nivel} | Exp: ${exp.toLocaleString()}
 📊 Progreso: ${progreso}
 🏆 Ranking: #${rank}
@@ -125,13 +125,13 @@ let handler = async (m, { conn, args, usedPrefix }) => {
 
 ──────────────
  𝐄𝐂𝐎𝐍𝐎𝐌𝐈𝐀
-👛 Cartera: ${coin.toLocaleString()} ${currency}
+👛 Carteira: ${coin.toLocaleString()} ${currency}
 🏦 Banco: ${bank.toLocaleString()} ${currency}
 💵 Total: ${total.toLocaleString()} ${currency}
 
 ──────────────
  𝐇𝐀𝐑𝐄𝐌
-🎴 Personajes: ${haremCount}
+🎴 Personagens: ${haremCount}
 💎 Valor: ${haremValue.toLocaleString()}
 
 ──────────────
@@ -146,7 +146,7 @@ let handler = async (m, { conn, args, usedPrefix }) => {
     )
 
   } catch (error) {
-    await m.reply(`⚠︎ Error en profile.\nUsa ${usedPrefix}report\n\n${error.message}`)
+    await m.reply(`⚠︎ Erro no perfil.\nUsa ${usedPrefix}report\n\n${error.message}`)
   }
 }
 
