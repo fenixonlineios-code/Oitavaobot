@@ -84,9 +84,9 @@ if (session.downloads >= 5) {
 clearTimeout(session.timeout)
 delete conn.xvideos[m.sender]}}}
 
-handler.help = ['xvideos']
+handler.help = ['xvideos2']
 handler.tags = ['download', 'nsfw']
-handler.command = ['xvideos', 'xvsearch', 'xvideosdl', 'xvid']
+handler.command = ['xvideos2', 'xvsearch', 'xvideosdl', 'xvid']
 handler.group = true
 
 export default handler
