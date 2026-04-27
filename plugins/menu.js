@@ -47,34 +47,34 @@ ${grupos[tag].map(cmd => `┃ ➩ ${cmd}`).join('\n')}
       return m.reply(textoTag)
     }
 
-    let texto = `🍃 *OITAVÃO BOT*
+    let texto = `🩷 *OITAVÃO BOT*
 
 ${ucapan()} @${userId.split('@')[0]}
 
 👤 Usuário: ${name}
-💎 Nível: ${level}
-🗿 EXP: ${exp}
+🎟️ Nível: ${level}
+💗 EXP: ${exp}
 💰 Coins: ${coin}
 
 ━━━━━━━━━━━━━━
-⚡ *COMANDOS RÁPIDOS*
+•🍬 *COMANDOS RÁPIDOS*
 ━━━━━━━━━━━━━━
-👤 ${usedPrefix}perfil
-📋 ${usedPrefix}menu
-🏓 ${usedPrefix}ping
-👑 ${usedPrefix}owner
-📊 ${usedPrefix}level
-💰 ${usedPrefix}coin
-🪪 ${usedPrefix}registro
-🔎 ${usedPrefix}search
-🎵 ${usedPrefix}play
-🖼️ ${usedPrefix}sticker
+•|🌸 ${usedPrefix}perfil
+•|🌸 ${usedPrefix}menu
+•|🌸 ${usedPrefix}ping
+•|🌸 ${usedPrefix}owner
+•|🌸 ${usedPrefix}level
+•|🌸 ${usedPrefix}coin
+•|🌸 ${usedPrefix}registro
+•|🌸 ${usedPrefix}search
+•|🌸 ${usedPrefix}play
+•|🌸 ${usedPrefix}sticker
 
 ━━━━━━━━━━━━━━
-📂 *Escolha um menu abaixo:*`
+•🌺 *Escolha um menu abaixo:*`
 
     await conn.sendMessage(m.chat, {
-      video: { url: 'https://i.ibb.co/XxKphFrJ/88-CD7165-3663-4-CE4-AC23-09-CCD763-A80-F.gif' },
+      image: { url: 'https://i.ibb.co/5W62jvz2/IMG-9525.jpg' },
       gifPlayback: true,
       caption: texto,
       footer: 'OITAVÃO BOT',
