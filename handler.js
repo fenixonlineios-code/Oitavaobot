@@ -66,6 +66,7 @@ if (!("exp" in user) || !isNumber(user.exp)) user.exp = 0
 if (!("coin" in user) || !isNumber(user.coin)) user.coin = 0
 if (!("bank" in user) || !isNumber(user.bank)) user.bank = 0
 if (!("level" in user) || !isNumber(user.level)) user.level = 0
+if (!("plano18" in user)) user.plano18 = false
 if (!("health" in user) || !isNumber(user.health)) user.health = 100
 if (!("genre" in user)) user.genre = ""
 if (!("birth" in user)) user.birth = ""
