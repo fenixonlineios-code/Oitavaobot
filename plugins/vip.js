@@ -1,16 +1,17 @@
-let handler = async (m, { args }) => {
-  let target = args[0]
+let handler = async (m, { conn }) => {
+  let target = m.mentionedJid[0]
 
-  if (!target) return m.reply('Use: /vip numero@s.whatsapp.net')
+  if (!target) return m.reply('Marque alguém')
 
-  let user = global.db.data.users[target]
-  if (!user) return m.reply('Usuário não encontrado')
+  if (!global.db.data.users[target]) {
+    global.db.data.users[target] = { plano18: true }
+  } else {
+    global.db.data.users[target].plano18 = true
+  }
 
-  user.acesso18 = true
-
-  m.reply('💎 VIP liberado')
+  m.reply('💎 Acesso liberado')
 }
 
-handler.command = ['vip']
+handler.command = ['acesso18']
 handler.owner = true
 export default handler
