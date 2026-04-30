@@ -343,10 +343,11 @@ if (plugin.owner && !isOwner) {
 fail("owner", m, this)
 continue
 }
-if (plugin.premium && !isPrems) {
-fail("premium", m, this)
-continue
-}
+// 🔥 DESATIVADO PREMIUM GLOBAL
+// if (plugin.premium && !isPrems) {
+//   fail("premium", m, this)
+//   continue
+// }
 if (plugin.group && !m.isGroup) {
 fail("group", m, this)
 continue
