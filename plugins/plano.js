@@ -2,7 +2,7 @@ let handler = async (m, { conn }) => {
   let user = global.db.data.users[m.sender]
 
   let registrado = user.registered ? '✅ Sim' : '❌ Não'
-  let plano = user.acesso18 ? '💎 VIP' : '🆓 Free'
+  let plano = user.plano18 ? '💎 VIP' : '🆓 Free'
 
   let texto = `
 🩷 *SEU PERFIL*
