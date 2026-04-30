@@ -1,17 +1,15 @@
-let handler = async (m, { conn }) => {
-  let target = m.mentionedJid[0]
-
-  if (!target) return m.reply('Marque alguém')
+let handler = async (m, { conn, args }) => {
+  let target = m.mentionedJid[0] || m.sender
 
   if (!global.db.data.users[target]) {
-    global.db.data.users[target] = { plano18: true }
-  } else {
-    global.db.data.users[target].plano18 = true
+    global.db.data.users[target] = {}
   }
 
-  m.reply('💎 Acesso liberado')
+  global.db.data.users[target].plano18 = true
+
+  m.reply('💎 VIP ativado')
 }
 
-handler.command = ['acesso18']
+handler.command = ['vip']
 handler.owner = true
 export default handler
