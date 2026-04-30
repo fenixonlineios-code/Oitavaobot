@@ -154,6 +154,8 @@ console.error(e)
 }
 if (typeof m.text !== "string") m.text = ""
 const user = global.db.data.users[m.sender]
+  // 🔥 SEU SISTEMA MANDA NO PREMIUM
+user.premium = user.plano18 === true
 try {
 const actual = user.name || ""
 const nuevo = m.pushName || await this.getName(m.sender)
@@ -164,7 +166,7 @@ const chat = global.db.data.chats[m.chat]
 const settings = global.db.data.settings[this.user.jid]  
 const isROwner = [...global.owner.map((number) => number)].map(v => v.replace(/[^0-9]/g, "") + "@s.whatsapp.net").includes(m.sender)
 const isOwner = isROwner || m.fromMe
-const isPrems = isROwner
+const isPrems = isROwner || user.plano18 === true
 const isOwners = [this.user.jid, ...global.owner.map((number) => number + "@s.whatsapp.net")].includes(m.sender)
 if (settings.self && !isOwners) return
 if (settings.gponly && !isOwners && !m.chat.endsWith('g.us') && !/code|p|ping|qr|estado|status|infobot|botinfo|report|reportar|invite|join|logout|suggest|help|menu/gim.test(m.text)) return
@@ -343,11 +345,23 @@ if (plugin.owner && !isOwner) {
 fail("owner", m, this)
 continue
 }
-// 🔥 DESATIVADO PREMIUM GLOBAL
-// if (plugin.premium && !isPrems) {
-//   fail("premium", m, this)
-//   continue
-// }
+if (plugin.premium && !isPrems) {
+  return this.sendMessage(m.chat, {
+    text: `
+🔒 *Acesso restrito*
+
+Esse comando é VIP 💎
+
+Use o botão abaixo para ver seu plano.
+`,
+    footer: 'OITAVÃO BOT',
+    buttons: [
+      { buttonId: '.plano', buttonText: { displayText: '👤 Ver plano' }, type: 1 },
+      { buttonId: '.owner', buttonText: { displayText: '📞 Falar com dono' }, type: 1 }
+    ],
+    headerType: 1
+  }, { quoted: m })
+}
 if (plugin.group && !m.isGroup) {
 fail("group", m, this)
 continue
