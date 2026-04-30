@@ -290,6 +290,28 @@ global.db.data.chats[m.chat].primaryBot = null
 
 if (!isAccept) continue
 m.plugin = name
+// 🔒 BLOQUEIO DO MENU18 (NSFW)
+if (plugin.tags && plugin.tags.includes('nsfw')) {
+  let user = global.db.data.users[m.sender]
+
+  if (!user.plano18) {
+    return this.sendMessage(m.chat, {
+      text: `
+🔒 *Acesso restrito*
+
+Esse menu é exclusivo 💎
+
+Use o botão abaixo para ver seu status.
+`,
+      footer: 'OITAVÃO BOT',
+      buttons: [
+        { buttonId: '.perfil', buttonText: { displayText: '👤 Ver perfil' }, type: 1 },
+        { buttonId: '.owner', buttonText: { displayText: '📞 Falar com dono' }, type: 1 }
+      ],
+      headerType: 1
+    }, { quoted: m })
+  }
+}
 if (isAccept) { global.db.data.users[m.sender].commands = (global.db.data.users[m.sender].commands || 0) + 1 }
 if (chat) {
 const botId = this.user.jid
