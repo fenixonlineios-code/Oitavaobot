@@ -305,7 +305,7 @@ Use o botão abaixo para ver seu status.
 `,
       footer: 'OITAVÃO BOT',
       buttons: [
-        { buttonId: '.perfil', buttonText: { displayText: '👤 Ver perfil' }, type: 1 },
+        { buttonId: '.plano', buttonText: { displayText: '👤 Ver perfil' }, type: 1 },
         { buttonId: '.owner', buttonText: { displayText: '📞 Falar com dono' }, type: 1 }
       ],
       headerType: 1
