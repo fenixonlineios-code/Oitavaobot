@@ -4,7 +4,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     footer: 'OITAVÃO BOT',
     buttons: [
       { buttonId: `${usedPrefix}menu anime`, buttonText: { displayText: '✨ ANIME' }, type: 1 },
-      { buttonId: `${usedPrefix}menu nsfw`, buttonText: { displayText: '🚫 NSFW' }, type: 1 },
+      { buttonId: `${usedPrefix}menu18check`, buttonText: { displayText: '🚫 MENU PROIBIDO' }, type: 1 },
       { buttonId: `${usedPrefix}menu7`, buttonText: { displayText: '➡️ MAIS' }, type: 1 }
     ],
     headerType: 1
