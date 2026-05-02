@@ -6,7 +6,7 @@ async function before(m, { conn }) {
   const body = (m.text || '').trim()
   if (!body) return false
 
-  // ignora comandos normais
+  // ignora comandos com prefixo
   if (/^[./#!]/.test(body)) return false
 
   const lower = body.toLowerCase()
@@ -21,7 +21,7 @@ async function before(m, { conn }) {
 
   const mentioned = mentionedList.includes(botJid)
 
-  // em grupo só responde se chamar
+  // Em grupo, só responde se chamar o bot
   if (m.isGroup) {
     const chamou =
       mentioned ||
@@ -35,13 +35,13 @@ async function before(m, { conn }) {
   try {
     await m.react?.('💭')
 
-console.log('━━━━━━━━━━━━━━━━━━━━')
-console.log('🤖 ASSISTENTE DEBUG')
-console.log('URL FINAL:', API_ASSISTENTE)
-console.log('MENSAGEM:', body)
-console.log('SENDER:', m.sender)
-console.log('CHAT:', m.chat)
-console.log('━━━━━━━━━━━━━━━━━━━━')
+    console.log('━━━━━━━━━━━━━━━━━━━━')
+    console.log('🤖 ASSISTENTE DEBUG')
+    console.log('URL FINAL:', API_ASSISTENTE)
+    console.log('MENSAGEM:', body)
+    console.log('SENDER:', m.sender)
+    console.log('CHAT:', m.chat)
+    console.log('━━━━━━━━━━━━━━━━━━━━')
 
     const res = await fetch(API_ASSISTENTE, {
       method: 'POST',
@@ -53,20 +53,34 @@ console.log('━━━━━━━━━━━━━━━━━━━━')
       })
     })
 
-    if (!res.ok) {
-      console.log('ERRO ASSISTENTE:', await res.text())
+    console.log('STATUS:', res.status)
+    console.log('CONTENT-TYPE:', res.headers.get('content-type'))
+
+    const raw = await res.text()
+    console.log('RESPOSTA RAW:', raw.slice(0, 1000))
+
+    let data
+    try {
+      data = JSON.parse(raw)
+    } catch {
       await m.react?.('❌')
+      await m.reply('❌ A API respondeu algo que não é JSON. Veja o log RAW.')
       return true
     }
 
-    const data = await res.json()
+    if (!res.ok) {
+      await m.react?.('❌')
+      await m.reply(`❌ Erro na API: ${res.status}\n\n${data.resposta || raw.slice(0, 300)}`)
+      return true
+    }
 
     await conn.sendMessage(m.chat, {
-      text: data.resposta || 'Não consegui responder agora.'
+      text: data.resposta || 'Não veio resposta.'
     }, { quoted: m })
 
     await m.react?.('✅')
     return true
+
   } catch (e) {
     console.error('ERRO ASSISTENTE IA:', e)
     await m.react?.('❌')
