@@ -33,7 +33,6 @@ async function before(m, { conn }) {
   }
 
   try {
-    await m.react?.('💭')
 
     console.log('━━━━━━━━━━━━━━━━━━━━')
     console.log('🤖 ASSISTENTE DEBUG')
@@ -78,7 +77,6 @@ async function before(m, { conn }) {
       text: data.resposta || 'Não veio resposta.'
     }, { quoted: m })
 
-    await m.react?.('✅')
     return true
 
   } catch (e) {
