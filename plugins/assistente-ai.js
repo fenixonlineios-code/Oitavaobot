@@ -2,19 +2,21 @@ import fetch from 'node-fetch'
 
 const API_ASSISTENTE = 'https://tpgb.online/api/assistente'
 
-let handler = async (m, { conn }) => {
+async function before(m, { conn }) {
   const body = (m.text || '').trim()
-  if (!body) return
+  if (!body) return false
 
-  // não responder comandos normais
-  if (/^[./#!]/.test(body)) return
-
-  const botJid = conn.user?.jid
-  const mentioned = m.mentionedJid?.includes(botJid)
+  // ignora comandos com prefixo
+  if (/^[./#!]/.test(body)) return false
 
   const lower = body.toLowerCase()
+  const botJid = conn.user?.jid
 
-  // No grupo, só responde se chamar
+  const mentioned =
+    m.mentionedJid?.includes(botJid) ||
+    m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.includes(botJid)
+
+  // em grupo só responde se chamar
   if (m.isGroup) {
     const chamou =
       mentioned ||
@@ -22,26 +24,26 @@ let handler = async (m, { conn }) => {
       lower.startsWith('oitavão ') ||
       lower.startsWith('oitavao ')
 
-    if (!chamou) return
+    if (!chamou) return false
   }
 
   try {
-    await m.react('💭')
+    await m.react?.('💭')
 
     const res = await fetch(API_ASSISTENTE, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         mensagem: body,
-        nome: m.pushName || 'usuário',
+        nome: m.pushName || m.name || 'usuário',
         jid: m.sender
       })
     })
 
     if (!res.ok) {
       console.log('ERRO ASSISTENTE:', await res.text())
-      await m.react('❌')
-      return
+      await m.react?.('❌')
+      return true
     }
 
     const data = await res.json()
@@ -50,15 +52,16 @@ let handler = async (m, { conn }) => {
       text: data.resposta || 'Não consegui responder agora.'
     }, { quoted: m })
 
-    await m.react('✅')
+    await m.react?.('✅')
+    return true
+
   } catch (e) {
-    console.error(e)
-    await m.react('❌')
+    console.error('ERRO ASSISTENTE IA:', e)
+    await m.react?.('❌')
+    return true
   }
 }
 
-handler.before = async (m, extra) => {
-  return await handler(m, extra)
+export default {
+  before
 }
-
-export default handler
