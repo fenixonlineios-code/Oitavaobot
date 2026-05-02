@@ -1,15 +1,15 @@
 import fetch from 'node-fetch'
 
 const SITE_URL = 'https://tpgb.online'
-const FOFOCAS_URL = `${SITE_URL}/fofocas.html`
+const FOFOCAS_URL = `${SITE_URL}/Oitavão/Fofocas`
 
 let handler = async (m, { conn, text, command, usedPrefix }) => {
-  // comando principal com botões
-  if (command === 'fofocas') {
+  // CENTRAL: só mostra botões
+  if (command === 'fofoca' || command === 'fofocas') {
     return conn.sendMessage(m.chat, {
       text: `🫢 *Central de Fofocas*
 
-Escolha uma opção:`,
+Escolha uma opção abaixo:`,
       footer: 'OITAVÃO BOT',
       buttons: [
         {
@@ -27,25 +27,25 @@ Escolha uma opção:`,
     }, { quoted: m })
   }
 
-  // botão de enviar
+  // botão "Enviar fofoca"
   if (command === 'enviarfofoca') {
     return m.reply(`📝 *Enviar fofoca*
 
 Use assim:
 
-${usedPrefix}fofoca sua fofoca aqui
+${usedPrefix}fofocar sua fofoca aqui
 
 Exemplo:
-${usedPrefix}fofoca disseram que alguém sumiu da call 👀`)
+${usedPrefix}fofocar disseram que alguém sumiu da call 👀`)
   }
 
-  // enviar fofoca pelo bot
-  if (command === 'fofoca') {
+  // comando real que envia
+  if (command === 'fofocar') {
     if (!text) {
       return m.reply(`🫢 Escreve a fofoca depois do comando.
 
 Exemplo:
-${usedPrefix}fofoca disseram que...`)
+${usedPrefix}fofocar disseram que...`)
     }
 
     const res = await fetch(`${SITE_URL}/Oitavão/fofoca`, {
@@ -62,7 +62,7 @@ ${usedPrefix}fofoca disseram que...`)
     return m.reply('🔥 Fofoca enviada!')
   }
 
-  // botão de ver fofocas
+  // botão "Ver fofocas"
   if (command === 'verfofocas') {
     return m.reply(`👀 Veja as fofocas aqui:
 
@@ -70,8 +70,8 @@ ${FOFOCAS_URL}`)
   }
 }
 
-handler.command = ['fofocas', 'fofoca', 'enviarfofoca', 'verfofocas']
+handler.command = ['fofoca', 'fofocas', 'enviarfofoca', 'fofocar', 'verfofocas']
 handler.tags = ['fun']
-handler.help = ['fofocas', 'fofoca <texto>']
+handler.help = ['fofoca', 'fofocar <texto>']
 
 export default handler
