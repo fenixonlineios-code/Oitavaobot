@@ -35,6 +35,14 @@ async function before(m, { conn }) {
   try {
     await m.react?.('💭')
 
+console.log('━━━━━━━━━━━━━━━━━━━━')
+console.log('🤖 ASSISTENTE DEBUG')
+console.log('URL FINAL:', API_ASSISTENTE)
+console.log('MENSAGEM:', body)
+console.log('SENDER:', m.sender)
+console.log('CHAT:', m.chat)
+console.log('━━━━━━━━━━━━━━━━━━━━')
+
     const res = await fetch(API_ASSISTENTE, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
