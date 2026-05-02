@@ -6,15 +6,20 @@ async function before(m, { conn }) {
   const body = (m.text || '').trim()
   if (!body) return false
 
-  // ignora comandos com prefixo
+  // ignora comandos normais
   if (/^[./#!]/.test(body)) return false
 
   const lower = body.toLowerCase()
   const botJid = conn.user?.jid
 
-  const mentioned =
-    m.mentionedJid?.includes(botJid) ||
-    m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.includes(botJid)
+  const mentionedList =
+    Array.isArray(m.mentionedJid)
+      ? m.mentionedJid
+      : Array.isArray(m.message?.extendedTextMessage?.contextInfo?.mentionedJid)
+        ? m.message.extendedTextMessage.contextInfo.mentionedJid
+        : []
+
+  const mentioned = mentionedList.includes(botJid)
 
   // em grupo só responde se chamar
   if (m.isGroup) {
@@ -54,7 +59,6 @@ async function before(m, { conn }) {
 
     await m.react?.('✅')
     return true
-
   } catch (e) {
     console.error('ERRO ASSISTENTE IA:', e)
     await m.react?.('❌')
@@ -62,6 +66,4 @@ async function before(m, { conn }) {
   }
 }
 
-export default {
-  before
-}
+export default { before }
