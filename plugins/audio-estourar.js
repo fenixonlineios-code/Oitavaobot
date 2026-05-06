@@ -11,23 +11,24 @@ if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true })
 
 const MAX_MB = 15
 
-// 🔊 Grave forte + alto
+// 🔊 NORMAL: alto + grave, mas mais entendível
 const FILTRO_ESTOURADO =
-  "bass=g=15:f=80:w=1," +
+  "bass=g=14:f=85:w=0.8," +
+  "equalizer=f=70:width_type=h:width=120:g=10," +
+  "equalizer=f=160:width_type=h:width=180:g=6," +
+  "volume=10dB," +
+  "acompressor=threshold=-14dB:ratio=2.5:attack=8:release=120," +
+  "asoftclip=type=tanh:param=1.6," +
+  "volume=4dB"
+
+// 💀 ABSURDO: fica como o normal antigo
+const FILTRO_ABSURDO =
+  "bass=g=25:f=80:w=1," +
   "equalizer=f=60:width_type=h:width=120:g=18," +
   "equalizer=f=120:width_type=h:width=180:g=14," +
-  "volume=38dB," +
+  "volume=18dB," +
   "asoftclip=type=tanh:param=3," +
-  "volume=38dB"
-
-// 💀 Grave absurdo + volume destruído
-const FILTRO_ABSURDO =
-  "bass=g=35:f=70:w=1," +
-  "equalizer=f=55:width_type=h:width=140:g=25," +
-  "equalizer=f=110:width_type=h:width=200:g=20," +
-  "volume=28dB," +
-  "asoftclip=type=tanh:param=5," +
-  "volume=12dB"
+  "volume=8dB"
 
 function tmpFile(ext) {
   return path.join(
