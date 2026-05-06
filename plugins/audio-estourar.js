@@ -9,24 +9,25 @@ ffmpeg.setFfmpegPath(ffmpegPath)
 const tmpDir = './tmp'
 if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true })
 
-// limite pra não travar o Railway
 const MAX_MB = 15
 
-// 🔊 PRESET ESTOURADO COM GRAVE
-const FILTRO_ESTOURADO = [
-  'bass=g=22:f=80:w=0.6',
-  'bass=g=18:f=140:w=0.7',
-  'volume=240',
-  'acompressor=threshold=-28dB:ratio=10:attack=2:release=60',
-]
+// 🔊 Grave forte + alto
+const FILTRO_ESTOURADO =
+  "bass=g=25:f=80:w=1," +
+  "equalizer=f=60:width_type=h:width=120:g=18," +
+  "equalizer=f=120:width_type=h:width=180:g=14," +
+  "volume=18dB," +
+  "asoftclip=type=tanh:param=3," +
+  "volume=8dB"
 
-// 💀 PRESET MAIS INSANO AINDA
-const FILTRO_ABSURDO = [
-  'bass=g=30:f=70:w=0.7',
-  'bass=g=24:f=140:w=0.8',
-  'volume=240',
-  'acompressor=threshold=-32dB:ratio=14:attack=1:release=50',
-]
+// 💀 Grave absurdo + volume destruído
+const FILTRO_ABSURDO =
+  "bass=g=35:f=70:w=1," +
+  "equalizer=f=55:width_type=h:width=140:g=25," +
+  "equalizer=f=110:width_type=h:width=200:g=20," +
+  "volume=28dB," +
+  "asoftclip=type=tanh:param=5," +
+  "volume=12dB"
 
 function tmpFile(ext) {
   return path.join(
@@ -43,7 +44,7 @@ function safeDelete(file) {
 
 function processarMidia(input, output, isVideo = false, modo = 'normal') {
   return new Promise((resolve, reject) => {
-    const filtros = modo === 'absurdo'
+    const filtro = modo === 'absurdo'
       ? FILTRO_ABSURDO
       : FILTRO_ESTOURADO
 
@@ -53,7 +54,8 @@ function processarMidia(input, output, isVideo = false, modo = 'normal') {
       cmd = cmd
         .videoCodec('copy')
         .audioCodec('aac')
-        .audioFilters(filtros)
+        .audioBitrate('192k')
+        .audioFilters(filtro)
         .outputOptions([
           '-movflags',
           '+faststart'
@@ -61,10 +63,14 @@ function processarMidia(input, output, isVideo = false, modo = 'normal') {
     } else {
       cmd = cmd
         .audioCodec('libmp3lame')
-        .audioFilters(filtros)
+        .audioBitrate('192k')
+        .audioFilters(filtro)
     }
 
     cmd
+      .on('start', line => {
+        console.log('FFMPEG CMD:', line)
+      })
       .on('end', () => resolve(output))
       .on('error', reject)
       .save(output)
@@ -132,10 +138,13 @@ Esse arquivo tem: ${sizeMB.toFixed(1)} MB`)
           : '🔊 Vídeo com áudio estourado'
       }, { quoted: m })
     } else {
+      // Enviar como documento preserva melhor o volume do que enviar como áudio normal
       await conn.sendMessage(m.chat, {
-        audio: finalBuffer,
+        document: finalBuffer,
         mimetype: 'audio/mpeg',
-        ptt: false
+        fileName: modo === 'absurdo'
+          ? 'audio-estourado-absurdo.mp3'
+          : 'audio-estourado.mp3'
       }, { quoted: m })
     }
 
