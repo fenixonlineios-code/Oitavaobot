@@ -13,12 +13,12 @@ const MAX_MB = 15
 
 // 🔊 Grave forte + alto
 const FILTRO_ESTOURADO =
-  "bass=g=25:f=80:w=1," +
+  "bass=g=15:f=80:w=1," +
   "equalizer=f=60:width_type=h:width=120:g=18," +
   "equalizer=f=120:width_type=h:width=180:g=14," +
-  "volume=18dB," +
+  "volume=38dB," +
   "asoftclip=type=tanh:param=3," +
-  "volume=8dB"
+  "volume=38dB"
 
 // 💀 Grave absurdo + volume destruído
 const FILTRO_ABSURDO =
