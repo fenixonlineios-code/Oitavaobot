@@ -14,8 +14,8 @@ const MAX_MB = 15
 // 🔊 NORMAL: alto + grave, mas mais entendível
 const FILTRO_ESTOURADO =
   "bass=g=19:f=80:w=0.9," +
-  "equalizer=f=70:width_type=h:width=120:g=10," +
-  "equalizer=f=160:width_type=h:width=180:g=6," +
+  "equalizer=f=70:width_type=h:width=120:g=12," +
+  "equalizer=f=140:width_type=h:width=180:g=10," +
   "volume=18dB," +
   "acompressor=threshold=-14dB:ratio=2.5:attack=8:release=120," +
   "asoftclip=type=tanh:param=1.6," +
