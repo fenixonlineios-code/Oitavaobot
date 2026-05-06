@@ -18,7 +18,7 @@ const FILTRO_ESTOURADO =
   "equalizer=f=140:width_type=h:width=180:g=10," +
   "volume=18dB," +
   "acompressor=threshold=-14dB:ratio=2.5:attack=8:release=120," +
-  "asoftclip=type=tanh:param=1.6," +
+  "asoftclip=type=tanh:param=2.6," +
   "volume=8dB"
 
 // 💀 ABSURDO: fica como o normal antigo
