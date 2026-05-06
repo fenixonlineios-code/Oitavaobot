@@ -16,10 +16,10 @@ const FILTRO_ESTOURADO =
   "bass=g=19:f=80:w=0.9," +
   "equalizer=f=70:width_type=h:width=120:g=12," +
   "equalizer=f=140:width_type=h:width=180:g=10," +
-  "volume=120dB," +
+  "volume=80dB," +
   "acompressor=threshold=-14dB:ratio=2.5:attack=8:release=120," +
-  "asoftclip=type=tanh:param=2.9," +
-  "volume=120dB"
+  "asoftclip=type=tanh:param=2.8," +
+  "volume=80dB"
 
 // 💀 ABSURDO: fica como o normal antigo
 const FILTRO_ABSURDO =
