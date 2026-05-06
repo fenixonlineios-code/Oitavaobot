@@ -28,7 +28,7 @@ function processarMidia(input, output, isVideo = false) {
         .videoCodec('copy')
         .audioCodec('aac')
         .audioFilters([
-          'volume=8',
+          'volume=30',
           'acompressor=threshold=-18dB:ratio=6:attack=5:release=80',
           'alimiter=limit=0.95'
         ])
@@ -36,7 +36,7 @@ function processarMidia(input, output, isVideo = false) {
       cmd = cmd
         .audioCodec('libmp3lame')
         .audioFilters([
-          'volume=8',
+          'volume=30',
           'acompressor=threshold=-18dB:ratio=6:attack=5:release=80',
           'alimiter=limit=0.95'
         ])
