@@ -28,7 +28,7 @@ function processarMidia(input, output, isVideo = false) {
         .videoCodec('copy')
         .audioCodec('aac')
         .audioFilters([
-          'volume=120',
+          'volume=500',
           'acompressor=threshold=-18dB:ratio=6:attack=5:release=80',
           'alimiter=limit=0.95'
         ])
