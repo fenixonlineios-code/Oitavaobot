@@ -16,18 +16,16 @@ const MAX_MB = 15
 const FILTRO_ESTOURADO = [
   'bass=g=22:f=80:w=0.6',
   'bass=g=18:f=140:w=0.7',
-  'volume=14',
+  'volume=240',
   'acompressor=threshold=-28dB:ratio=10:attack=2:release=60',
-  'alimiter=limit=0.98'
 ]
 
 // 💀 PRESET MAIS INSANO AINDA
 const FILTRO_ABSURDO = [
   'bass=g=30:f=70:w=0.7',
   'bass=g=24:f=140:w=0.8',
-  'volume=20',
+  'volume=240',
   'acompressor=threshold=-32dB:ratio=14:attack=1:release=50',
-  'alimiter=limit=1.0'
 ]
 
 function tmpFile(ext) {
