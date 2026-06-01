@@ -252,12 +252,39 @@ continue
 if (typeof plugin !== "function") {
 continue
 }
+// BOTÃO NORMAL
 if (m.message?.buttonsResponseMessage?.selectedButtonId) {
   m.text = m.message.buttonsResponseMessage.selectedButtonId
 }
 
+// LISTA NORMAL
 if (m.message?.listResponseMessage?.singleSelectReply?.selectedRowId) {
   m.text = m.message.listResponseMessage.singleSelectReply.selectedRowId
+}
+
+// BOTÃO/LISTA INTERACTIVE NATIVE FLOW
+if (m.message?.interactiveResponseMessage?.nativeFlowResponseMessage?.paramsJson) {
+  try {
+    const paramsJson = m.message.interactiveResponseMessage.nativeFlowResponseMessage.paramsJson
+    const params = JSON.parse(paramsJson)
+
+    const id =
+      params.id ||
+      params.rowId ||
+      params.selectedRowId ||
+      params.buttonId ||
+      params.command
+
+    if (id) {
+      m.text = id
+    }
+
+    console.log('✅ NATIVE FLOW CLICADO:', params)
+    console.log('✅ TEXTO VIRANDO COMANDO:', m.text)
+
+  } catch (e) {
+    console.error('❌ Erro ao ler nativeFlow:', e)
+  }
 }
 if ((usedPrefix = (match[0] || "")[0])) {
 const noPrefix = m.text.replace(usedPrefix, "")
