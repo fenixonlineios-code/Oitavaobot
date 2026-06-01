@@ -20,6 +20,7 @@ import { Boom } from '@hapi/boom'
 import { makeWASocket, protoType, serialize } from './lib/simple.js'
 import { Low, JSONFile } from 'lowdb'
 import store from './lib/store.js'
+import { startPhoneApi } from './lib/phone-api.js'
 const { proto } = (await import('@whiskeysockets/baileys')).default
 import pkg from 'google-libphonenumber'
 const { PhoneNumberUtil } = pkg
@@ -138,10 +139,12 @@ keepAliveIntervalMs: 55000,
 maxIdleTimeMs: 60000,
 }
 global.conn = makeWASocket(connectionOptions)
+startPhoneApi(() => global.conn)
 conn.ev.on("creds.update", saveCreds)
 
 if (!fs.existsSync(`./${sessions}/creds.json`)) {
-if (opcion === '2' || methodCode) {
+if (opcion === '2' || methodCode) {startPhoneApi(() => global.conn)
+
 opcion = '2'
 if (!conn.authState.creds.registered) {
 let addNumber
