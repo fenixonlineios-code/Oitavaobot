@@ -15,5 +15,5 @@ let handler = async (m, { conn, usedPrefix }) => {
   }, { quoted: m })
 }
 
-handler.command = ['menu7']
+handler.command = ['mudarsenha']
 export default handler
