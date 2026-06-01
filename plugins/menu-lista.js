@@ -134,14 +134,25 @@ ${theme.footer} Abra a lista ou use os botões rápidos.
       ]
     }
 
+    const media = await prepareWAMessageMedia(
+  {
+    image: {
+      url: 'https://i.ibb.co/5W62jvz2/IMG-9525.jpg'
+    }
+  },
+  {
+    upload: conn.waUploadToServer
+  }
+)
     const msg = generateWAMessageFromContent(m.chat, {
       viewOnceMessage: {
         message: {
           interactiveMessage: proto.Message.InteractiveMessage.create({
             header: proto.Message.InteractiveMessage.Header.create({
-              title: 'OITAVÃO BOT',
-              subtitle: 'Menu principal',
-              hasMediaAttachment: false
+             title: 'OITAVÃO BOT',
+             subtitle: 'Menu principal',
+             hasMediaAttachment: true,
+             ...media
             }),
 
             body: proto.Message.InteractiveMessage.Body.create({
