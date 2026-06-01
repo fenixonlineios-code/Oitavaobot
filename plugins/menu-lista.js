@@ -165,27 +165,22 @@ ${theme.footer} Abra a lista ou use os botões rápidos.
 
             nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
               buttons: [
-                {
-                  name: 'single_select',
-                  buttonParamsJson: JSON.stringify({
-                    title: '📜 Abrir lista',
-                    sections
-                  })
-                },
-                {
-                  name: 'quick_reply',
-                  buttonParamsJson: JSON.stringify({
-                    display_text: '🌷 MAIN',
-                    id: `${usedPrefix}menu main`
-                  })
-                },
-                {
-                  name: 'quick_reply',
-                  buttonParamsJson: JSON.stringify({
-                    display_text: '🧰 TOOLS',
-                    id: `${usedPrefix}menu tools`
-                  })
-                }
+{
+  name: 'quick_reply',
+  buttonParamsJson: JSON.stringify({
+    display_text: '🌷 MAIN',
+    id: `${usedPrefix}menu main`,
+    button_id: `${usedPrefix}menu main`
+  })
+},
+{
+  name: 'quick_reply',
+  buttonParamsJson: JSON.stringify({
+    display_text: '🧰 TOOLS',
+    id: `${usedPrefix}menu tools`,
+    button_id: `${usedPrefix}menu tools`
+  })
+}
               ]
             })
           })
