@@ -7,7 +7,7 @@ let handler = async (m, { conn, usedPrefix }) => {
   name: 'cta_url',
   buttonParamsJson: JSON.stringify({
     display_text: '🫢 Ver fofocas',
-    url: 'https://tpgb.online/Oitavão/Fofocas.html'
+    url: 'https://fenix.tpgb.online/Public/Esqueci-Senha'
   })
 }
     ],
