@@ -1,18 +1,18 @@
 let handler = async (m, { conn, usedPrefix }) => {
   try {
     await conn.sendMessage(m.chat, {
-      text: '🧪 *Teste de Lista*\n\nEscolha uma opção abaixo:',
+      text: 'Olá! Eu sou a assistente virtual do Fênix Online. Para começar, escolha o serviço para o qual deseja atendimento. *Novidade!* Agora você também pode pedir a *mudança de senha* da sua conta por *aqui*, *basta nos mandar /mudarsenha* 💬',
       footer: 'OITAVÃO BOT',
-      title: 'Menu de teste',
-      buttonText: 'Abrir lista',
+      title: 'Bem Vindo(a) ao nosso Portal!',
+      buttonText: 'Ver Opções',
       sections: [
         {
-          title: '🌸 Menus principais',
+          title: 'Solicitações em destaque',
           rows: [
             {
-              title: '📜 Menu principal',
-              description: 'Abrir o menu do bot',
-              rowId: `${usedPrefix}menu`
+              title: '🔒 Alteração de Senha',
+              description: 'Alterar senha do portal Fênix Online',
+              rowId: `${usedPrefix}mudarsenha`
             },
             {
               title: '👤 Perfil',
@@ -49,8 +49,8 @@ let handler = async (m, { conn, usedPrefix }) => {
   }
 }
 
-handler.command = ['testelista', 'lista']
+handler.command = ['Fênix', 'fênix', 'fenix', 'Fenix']
 handler.tags = ['tools']
-handler.help = ['testelista']
+handler.help = ['Fênix']
 
 export default handler
