@@ -1,5 +1,9 @@
 import moment from 'moment-timezone'
-import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
+import {
+  generateWAMessageFromContent,
+  prepareWAMessageMedia,
+  proto
+} from '@whiskeysockets/baileys'
 
 let handler = async (m, { conn, usedPrefix, args }) => {
   try {
