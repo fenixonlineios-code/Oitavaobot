@@ -103,9 +103,9 @@ ${theme.footer} Toque em um botão abaixo
   }
 }
 
-handler.help = ['menu', 'menu <tag>']
+handler.help = ['menuold', 'menu <tag>']
 handler.tags = ['main']
-handler.command = ['menu', 'menú', 'help']
+handler.command = ['menuold', 'menúold', 'helpold']
 handler.register = true
 
 export default handler
