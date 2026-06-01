@@ -163,31 +163,53 @@ ${theme.footer} Abra a lista ou use os botões rápidos.
               text: '© OITAVÃO BOT'
             }),
 
-            nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-              buttons: [
-                {
-                  name: 'single_select',
-                  buttonParamsJson: JSON.stringify({
-                    title: '📜 Abrir lista',
-                    sections
-                  })
-                },
-                {
-                  name: 'quick_reply',
-                  buttonParamsJson: JSON.stringify({
-                    display_text: '🌷 MAIN',
-                    id: `${usedPrefix}menu main`,
-                    button_id: `${usedPrefix}menu main`
-                  })
-                },
-                {
-                 name: 'quick_reply',
-                 buttonParamsJson: JSON.stringify({
-                   display_text: '🧰 TOOLS',
-                   id: `${usedPrefix}menu tools`,
-                   button_id: `${usedPrefix}menu tools`
-                 })
-                }
+nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+  buttons: [
+    {
+      name: 'single_select',
+      buttonParamsJson: JSON.stringify({
+        title: '📜 Abrir lista',
+        sections
+      })
+    },
+    {
+      name: 'single_select',
+      buttonParamsJson: JSON.stringify({
+        title: '🌷 MAIN',
+        sections: [
+          {
+            title: '🌷 MAIN',
+            rows: [
+              {
+                title: '🌷 Abrir MAIN',
+                description: 'Comandos principais do bot',
+                id: `${usedPrefix}menu main`
+              }
+            ]
+          }
+        ]
+      })
+    },
+    {
+      name: 'single_select',
+      buttonParamsJson: JSON.stringify({
+        title: '🧰 TOOLS',
+        sections: [
+          {
+            title: '🧰 TOOLS',
+            rows: [
+              {
+                title: '🧰 Abrir TOOLS',
+                description: 'Ferramentas do bot',
+                id: `${usedPrefix}menu tools`
+              }
+            ]
+          }
+        ]
+      })
+    }
+  ]
+})
               ]
             })
           })
