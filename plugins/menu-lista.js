@@ -93,31 +93,29 @@ ${ucapan()} @${userId.split('@')[0]}
 
 ${theme.line} ── ${theme.section} Rápidos ── ${theme.line}
 
-|${theme.cmd} • ${usedPrefix}perfil      |${theme.cmd} • ${usedPrefix}menu  
-|${theme.cmd} • ${usedPrefix}ping        |${theme.cmd} • ${usedPrefix}owner  
-|${theme.cmd} • ${usedPrefix}level       |${theme.cmd} • ${usedPrefix}coin  
-|${theme.cmd} • ${usedPrefix}registro    |${theme.cmd} • ${usedPrefix}search  
-|${theme.cmd} • ${usedPrefix}play        |${theme.cmd} • ${usedPrefix}sticker  
+|${theme.cmd} • ${usedPrefix}perfil      |${theme.cmd} • ${usedPrefix}menu
+|${theme.cmd} • ${usedPrefix}ping        |${theme.cmd} • ${usedPrefix}owner
+|${theme.cmd} • ${usedPrefix}level       |${theme.cmd} • ${usedPrefix}coin
+|${theme.cmd} • ${usedPrefix}registro    |${theme.cmd} • ${usedPrefix}search
+|${theme.cmd} • ${usedPrefix}play        |${theme.cmd} • ${usedPrefix}sticker
 
 ${theme.line} ───────────── ${theme.line}
 
-${theme.footer} Abra a lista ou use os botões rápidos.
+${theme.footer} Abra a lista abaixo.
 `.trim()
 
     let sections = Object.keys(grupos)
       .sort((a, b) => a.localeCompare(b))
-      .map(tagName => {
-        return {
-          title: `${emojis[tagName] || '⭐'} ${tagName.toUpperCase()}`,
-          rows: [
-            {
-              title: `${emojis[tagName] || '⭐'} Abrir ${tagName}`,
-              description: `${grupos[tagName].length} comandos disponíveis`,
-              id: `${usedPrefix}menu ${tagName}`
-            }
-          ]
-        }
-      })
+      .map(tagName => ({
+        title: `${emojis[tagName] || '⭐'} ${tagName.toUpperCase()}`,
+        rows: [
+          {
+            title: `${emojis[tagName] || '⭐'} Abrir ${tagName}`,
+            description: `${grupos[tagName].length} comandos disponíveis`,
+            id: `${usedPrefix}menu ${tagName}`
+          }
+        ]
+      }))
 
     if (!sections.length) {
       sections = [
@@ -135,24 +133,25 @@ ${theme.footer} Abra a lista ou use os botões rápidos.
     }
 
     const media = await prepareWAMessageMedia(
-  {
-    image: {
-      url: 'https://i.ibb.co/5W62jvz2/IMG-9525.jpg'
-    }
-  },
-  {
-    upload: conn.waUploadToServer
-  }
-)
+      {
+        image: {
+          url: 'https://i.ibb.co/5W62jvz2/IMG-9525.jpg'
+        }
+      },
+      {
+        upload: conn.waUploadToServer
+      }
+    )
+
     const msg = generateWAMessageFromContent(m.chat, {
       viewOnceMessage: {
         message: {
           interactiveMessage: proto.Message.InteractiveMessage.create({
             header: proto.Message.InteractiveMessage.Header.create({
-             title: 'OITAVÃO BOT',
-             subtitle: 'Menu principal',
-             hasMediaAttachment: true,
-             ...media
+              title: 'OITAVÃO BOT',
+              subtitle: 'Menu principal',
+              hasMediaAttachment: true,
+              ...media
             }),
 
             body: proto.Message.InteractiveMessage.Body.create({
@@ -163,53 +162,51 @@ ${theme.footer} Abra a lista ou use os botões rápidos.
               text: '© OITAVÃO BOT'
             }),
 
-nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-  buttons: [
-    {
-      name: 'single_select',
-      buttonParamsJson: JSON.stringify({
-        title: '📜 Abrir lista',
-        sections
-      })
-    },
-    {
-      name: 'single_select',
-      buttonParamsJson: JSON.stringify({
-        title: '🌷 MAIN',
-        sections: [
-          {
-            title: '🌷 MAIN',
-            rows: [
-              {
-                title: '🌷 Abrir MAIN',
-                description: 'Comandos principais do bot',
-                id: `${usedPrefix}menu main`
-              }
-            ]
-          }
-        ]
-      })
-    },
-    {
-      name: 'single_select',
-      buttonParamsJson: JSON.stringify({
-        title: '🧰 TOOLS',
-        sections: [
-          {
-            title: '🧰 TOOLS',
-            rows: [
-              {
-                title: '🧰 Abrir TOOLS',
-                description: 'Ferramentas do bot',
-                id: `${usedPrefix}menu tools`
-              }
-            ]
-          }
-        ]
-      })
-    }
-  ]
-})
+            nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+              buttons: [
+                {
+                  name: 'single_select',
+                  buttonParamsJson: JSON.stringify({
+                    title: '📜 Abrir lista',
+                    sections
+                  })
+                },
+                {
+                  name: 'single_select',
+                  buttonParamsJson: JSON.stringify({
+                    title: '🌷 MAIN',
+                    sections: [
+                      {
+                        title: '🌷 MAIN',
+                        rows: [
+                          {
+                            title: '🌷 Abrir MAIN',
+                            description: 'Comandos principais do bot',
+                            id: `${usedPrefix}menu main`
+                          }
+                        ]
+                      }
+                    ]
+                  })
+                },
+                {
+                  name: 'single_select',
+                  buttonParamsJson: JSON.stringify({
+                    title: '🧰 TOOLS',
+                    sections: [
+                      {
+                        title: '🧰 TOOLS',
+                        rows: [
+                          {
+                            title: '🧰 Abrir TOOLS',
+                            description: 'Ferramentas do bot',
+                            id: `${usedPrefix}menu tools`
+                          }
+                        ]
+                      }
+                    ]
+                  })
+                }
               ]
             })
           })
