@@ -64,27 +64,6 @@ Escolha uma categoria na lista abaixo:`,
         }
       ]
     }, { quoted: m })
-
-    // 2️⃣ DEPOIS MANDA OS BOTÕES
-    return conn.sendMessage(m.chat, {
-      text: `✨ *Ações rápidas*
-
-Use os botões abaixo:`,
-      footer: 'OITAVÃO BOT',
-      buttons: [
-        {
-          buttonId: `${usedPrefix}perfil`,
-          buttonText: { displayText: '👤 Perfil' },
-          type: 1
-        },
-        {
-          buttonId: `${usedPrefix}menu7`,
-          buttonText: { displayText: '⏭️ Próximo Menu' },
-          type: 1
-        }
-      ],
-      headerType: 1
-    }, { quoted: m })
   }
 }
 
