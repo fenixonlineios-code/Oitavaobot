@@ -252,6 +252,7 @@ continue
 if (typeof plugin !== "function") {
 continue
 }
+  
 // BOTÃO NORMAL
 if (m.message?.buttonsResponseMessage?.selectedButtonId) {
   m.text = m.message.buttonsResponseMessage.selectedButtonId
@@ -262,30 +263,33 @@ if (m.message?.listResponseMessage?.singleSelectReply?.selectedRowId) {
   m.text = m.message.listResponseMessage.singleSelectReply.selectedRowId
 }
 
-// BOTÃO/LISTA INTERACTIVE NATIVE FLOW
-if (m.message?.interactiveResponseMessage?.nativeFlowResponseMessage?.paramsJson) {
-  try {
-    const paramsJson = m.message.interactiveResponseMessage.nativeFlowResponseMessage.paramsJson
-    const params = JSON.parse(paramsJson)
+// INTERACTIVE / NATIVE FLOW
+try {
+  const native =
+    m.message?.interactiveResponseMessage?.nativeFlowResponseMessage
 
-    const id =
-      params.id ||
-      params.rowId ||
-      params.selectedRowId ||
-      params.buttonId ||
-      params.command
+  if (native?.paramsJson) {
+    const params = JSON.parse(native.paramsJson)
+
+    let id = null
+
+    if (typeof params.id === 'string') id = params.id
+    else if (typeof params.button_id === 'string') id = params.button_id
+    else if (typeof params.buttonId === 'string') id = params.buttonId
+    else if (typeof params.rowId === 'string') id = params.rowId
+    else if (typeof params.selectedRowId === 'string') id = params.selectedRowId
 
     if (id) {
       m.text = id
     }
 
-    console.log('✅ NATIVE FLOW CLICADO:', params)
-    console.log('✅ TEXTO VIRANDO COMANDO:', m.text)
-
-  } catch (e) {
-    console.error('❌ Erro ao ler nativeFlow:', e)
+    console.log('✅ NATIVE FLOW:', params)
+    console.log('✅ COMANDO:', m.text)
   }
+} catch (e) {
+  console.error('❌ Erro nativeFlow:', e)
 }
+  
 if ((usedPrefix = (match[0] || "")[0])) {
 const noPrefix = m.text.replace(usedPrefix, "")
 let [command, ...args] = noPrefix.trim().split(" ").filter(v => v)
