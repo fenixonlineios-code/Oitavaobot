@@ -101,7 +101,7 @@ ${theme.line} ── ${theme.section} Rápidos ── ${theme.line}
 
 ${theme.line} ───────────── ${theme.line}
 
-${theme.footer} Abra a lista abaixo.
+${theme.footer} Abra a lista ou use os botões rápidos.
 `.trim()
 
     let sections = Object.keys(grupos)
@@ -172,39 +172,17 @@ ${theme.footer} Abra a lista abaixo.
                   })
                 },
                 {
-                  name: 'single_select',
+                  name: 'quick_reply',
                   buttonParamsJson: JSON.stringify({
-                    title: '🌷 MAIN',
-                    sections: [
-                      {
-                        title: '🌷 MAIN',
-                        rows: [
-                          {
-                            title: '🌷 Abrir MAIN',
-                            description: 'Comandos principais do bot',
-                            id: `${usedPrefix}menu main`
-                          }
-                        ]
-                      }
-                    ]
+                    display_text: '🌷 MAIN',
+                    id: `${usedPrefix}menu main`
                   })
                 },
                 {
-                  name: 'single_select',
+                  name: 'quick_reply',
                   buttonParamsJson: JSON.stringify({
-                    title: '🧰 TOOLS',
-                    sections: [
-                      {
-                        title: '🧰 TOOLS',
-                        rows: [
-                          {
-                            title: '🧰 Abrir TOOLS',
-                            description: 'Ferramentas do bot',
-                            id: `${usedPrefix}menu tools`
-                          }
-                        ]
-                      }
-                    ]
+                    display_text: '🧰 TOOLS',
+                    id: `${usedPrefix}menu tools`
                   })
                 }
               ]
