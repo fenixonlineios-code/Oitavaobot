@@ -27,7 +27,7 @@ let handler = async (m, { conn, usedPrefix }) => {
           ]
         },
         {
-          title: '🧪 Testes',
+          title: 'Testes',
           rows: [
             {
               title: '🏓 Ping',
