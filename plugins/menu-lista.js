@@ -1,116 +1,206 @@
+import moment from 'moment-timezone'
 import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
 
-let handler = async (m, { conn, usedPrefix }) => {
-  const msg = generateWAMessageFromContent(m.chat, {
-    viewOnceMessage: {
-      message: {
-        interactiveMessage: proto.Message.InteractiveMessage.create({
-          body: proto.Message.InteractiveMessage.Body.create({
-            text: `🩷 *OITAVÃO BOT*
+let handler = async (m, { conn, usedPrefix, args }) => {
+  try {
+    let userId = m.sender
+    let userData = global.db.data.users[userId] || {}
 
-Escolha uma opção abaixo.
+    let exp = userData.exp || 0
+    let coin = userData.coin || 0
+    let level = userData.level || 0
+    let name = await conn.getName(userId)
 
-Você pode abrir a lista completa ou usar os botões rápidos.`
-          }),
+    const theme = {
+      bot: '🩷',
+      line: '✦',
+      user: '👤',
+      level: '🎟️',
+      exp: '💗',
+      coin: '💰',
+      section: '🍬',
+      cmd: '🌸',
+      footer: '🌺'
+    }
 
-          footer: proto.Message.InteractiveMessage.Footer.create({
-            text: 'OITAVÃO BOT'
-          }),
+    const emojis = {
+      main: '🌷',
+      tools: '🧰',
+      audio: '🎶',
+      group: '🎁',
+      owner: '👑',
+      fun: '🎮',
+      info: '📘',
+      internet: '🌐',
+      downloads: '⬇️',
+      admin: '🧦',
+      anime: '✨',
+      nsfw: '🚫',
+      search: '🔍',
+      sticker: '🖼️',
+      game: '🕹️',
+      premium: '💎',
+      bot: '🤖',
+      rg: '🪪'
+    }
 
-          header: proto.Message.InteractiveMessage.Header.create({
-            title: 'Menu principal',
-            subtitle: 'Lista + botões',
-            hasMediaAttachment: false
-          }),
+    let grupos = {}
 
-          nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-            buttons: [
-              {
-                name: 'single_select',
-                buttonParamsJson: JSON.stringify({
-                  title: '📜 Abrir lista',
-                  sections: [
-                    {
-                      title: '🌸 Principais',
-                      rows: [
-                        {
-                          title: '🏠 Menu principal',
-                          description: 'Abrir menu completo',
-                          id: `${usedPrefix}menu`
-                        },
-                        {
-                          title: '👤 Perfil',
-                          description: 'Ver seu perfil',
-                          id: `${usedPrefix}perfil`
-                        },
-                        {
-                          title: '🫢 Fofocas',
-                          description: 'Central de fofocas',
-                          id: `${usedPrefix}fofoca`
-                        }
-                      ]
-                    },
-                    {
-                      title: '🎨 Criação',
-                      rows: [
-                        {
-                          title: '🖼️ Sticker',
-                          description: 'Criar figurinha',
-                          id: `${usedPrefix}sticker`
-                        },
-                        {
-                          title: '🔊 Estourar áudio',
-                          description: 'Aumentar grave/volume',
-                          id: `${usedPrefix}estourar`
-                        }
-                      ]
-                    },
-                    {
-                      title: '🛠️ Ferramentas',
-                      rows: [
-                        {
-                          title: '🏓 Ping',
-                          description: 'Testar velocidade',
-                          id: `${usedPrefix}ping`
-                        },
-                        {
-                          title: '👑 Dono',
-                          description: 'Falar com o dono',
-                          id: `${usedPrefix}owner`
-                        }
-                      ]
-                    }
-                  ]
-                })
-              },
-              {
-                name: 'quick_reply',
-                buttonParamsJson: JSON.stringify({
-                  display_text: '👤 Perfil',
-                  id: `${usedPrefix}perfil`
-                })
-              },
-              {
-                name: 'quick_reply',
-                buttonParamsJson: JSON.stringify({
-                  display_text: '🫢 Fofocas',
-                  id: `${usedPrefix}fofoca`
-                })
-              }
-            ]
-          })
-        })
+    for (let plugin of Object.values(global.plugins || {})) {
+      if (!plugin.help || !plugin.tags) continue
+
+      for (let tag of plugin.tags) {
+        if (!grupos[tag]) grupos[tag] = []
+
+        for (let help of plugin.help) {
+          if (!help || /^\$|^=>|^>/.test(help)) continue
+          grupos[tag].push(`${usedPrefix}${help}`)
+        }
       }
     }
-  }, { quoted: m })
 
-  await conn.relayMessage(m.chat, msg.message, {
-    messageId: msg.key.id
-  })
+    for (let tag in grupos) {
+      grupos[tag] = [...new Set(grupos[tag])].sort((a, b) => a.localeCompare(b))
+    }
+
+    let tag = (args[0] || '').toLowerCase().trim()
+
+    if (tag) {
+      if (!grupos[tag] || !grupos[tag].length) {
+        return m.reply(`${theme.footer} Não encontrei comandos em *${tag}*.`)
+      }
+
+      let textoTag = `╭━━ ${emojis[tag] || '⭐'} *${tag.toUpperCase()}* ━━⬣
+${grupos[tag].map(cmd => `┃ ➩ ${cmd}`).join('\n')}
+╰━━━━━━━━━━━━⬣`
+
+      return m.reply(textoTag)
+    }
+
+    let texto = `
+${theme.line} ── ${theme.bot} OITAVÃO BOT ── ${theme.line}
+
+${ucapan()} @${userId.split('@')[0]}
+
+┊ ${theme.user} ${name}
+┊ ${theme.level} Lv. ${level}
+┊ ${theme.exp} ${exp} XP
+┊ ${theme.coin} ${coin} Coins
+
+${theme.line} ── ${theme.section} Rápidos ── ${theme.line}
+
+|${theme.cmd} • ${usedPrefix}perfil      |${theme.cmd} • ${usedPrefix}menu  
+|${theme.cmd} • ${usedPrefix}ping        |${theme.cmd} • ${usedPrefix}owner  
+|${theme.cmd} • ${usedPrefix}level       |${theme.cmd} • ${usedPrefix}coin  
+|${theme.cmd} • ${usedPrefix}registro    |${theme.cmd} • ${usedPrefix}search  
+|${theme.cmd} • ${usedPrefix}play        |${theme.cmd} • ${usedPrefix}sticker  
+
+${theme.line} ───────────── ${theme.line}
+
+${theme.footer} Abra a lista ou use os botões rápidos.
+`.trim()
+
+    let sections = Object.keys(grupos)
+      .sort((a, b) => a.localeCompare(b))
+      .map(tagName => {
+        return {
+          title: `${emojis[tagName] || '⭐'} ${tagName.toUpperCase()}`,
+          rows: [
+            {
+              title: `${emojis[tagName] || '⭐'} Abrir ${tagName}`,
+              description: `${grupos[tagName].length} comandos disponíveis`,
+              id: `${usedPrefix}menu ${tagName}`
+            }
+          ]
+        }
+      })
+
+    if (!sections.length) {
+      sections = [
+        {
+          title: '🌷 MAIN',
+          rows: [
+            {
+              title: '🌷 Menu principal',
+              description: 'Abrir menu principal',
+              id: `${usedPrefix}menu main`
+            }
+          ]
+        }
+      ]
+    }
+
+    const msg = generateWAMessageFromContent(m.chat, {
+      viewOnceMessage: {
+        message: {
+          interactiveMessage: proto.Message.InteractiveMessage.create({
+            header: proto.Message.InteractiveMessage.Header.create({
+              title: 'OITAVÃO BOT',
+              subtitle: 'Menu principal',
+              hasMediaAttachment: false
+            }),
+
+            body: proto.Message.InteractiveMessage.Body.create({
+              text: texto
+            }),
+
+            footer: proto.Message.InteractiveMessage.Footer.create({
+              text: '© OITAVÃO BOT'
+            }),
+
+            nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+              buttons: [
+                {
+                  name: 'single_select',
+                  buttonParamsJson: JSON.stringify({
+                    title: '📜 Abrir lista',
+                    sections
+                  })
+                },
+                {
+                  name: 'quick_reply',
+                  buttonParamsJson: JSON.stringify({
+                    display_text: '🌷 MAIN',
+                    id: `${usedPrefix}menu main`
+                  })
+                },
+                {
+                  name: 'quick_reply',
+                  buttonParamsJson: JSON.stringify({
+                    display_text: '🧰 TOOLS',
+                    id: `${usedPrefix}menu tools`
+                  })
+                }
+              ]
+            })
+          })
+        }
+      }
+    }, { quoted: m })
+
+    await conn.relayMessage(m.chat, msg.message, {
+      messageId: msg.key.id
+    })
+
+    await m.react(theme.footer)
+
+  } catch (err) {
+    console.error(err)
+    await m.reply('Erro no menu:\n' + err.message)
+  }
 }
 
-handler.command = ['menuinterativo', 'menui']
+handler.help = ['menu', 'menu <tag>']
 handler.tags = ['main']
-handler.help = ['menuinterativo']
+handler.command = ['menu', 'menú', 'help']
+handler.register = true
 
 export default handler
+
+function ucapan() {
+  const h = Number(moment.tz('America/Sao_Paulo').format('HH'))
+
+  if (h >= 5 && h < 12) return 'Bom Dia ☀️'
+  if (h >= 12 && h < 18) return 'Boa Tarde 🌤️'
+  return 'Boa Noite 🌙'
+}
