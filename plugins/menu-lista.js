@@ -151,7 +151,6 @@ ${theme.footer} Abra a lista ou use os botões rápidos.
               title: 'OITAVÃO BOT',
               subtitle: 'Menu principal',
               hasMediaAttachment: true,
-              ...media
             }),
 
             body: proto.Message.InteractiveMessage.Body.create({
