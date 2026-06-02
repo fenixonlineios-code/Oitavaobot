@@ -143,33 +143,23 @@ ${theme.footer} Abra a lista ou use os botões rápidos.
       }
     )
 
-    const msg = generateWAMessageFromContent(m.chat, {
-      viewOnceMessage: {
-        message: {
-          interactiveMessage: proto.Message.InteractiveMessage.create({
-            header: proto.Message.InteractiveMessage.Header.create({
-              title: 'OITAVÃO BOT',
-              subtitle: 'Menu principal',
-              hasMediaAttachment: true,
-            }),
+    const msg = generateWAMessageFromContent(
+  m.chat,
+  {
+    viewOnceMessage: {
+      message: {
+        interactiveMessage: proto.Message.InteractiveMessage.create({
+          body: proto.Message.InteractiveMessage.Body.create({
+            text: texto
+          }),
 
-            body: proto.Message.InteractiveMessage.Body.create({
-              text: texto
-            }),
+          footer: proto.Message.InteractiveMessage.Footer.create({
+            text: '© OITAVÃO BOT'
+          }),
 
-            footer: proto.Message.InteractiveMessage.Footer.create({
-              text: '© OITAVÃO BOT'
-            }),
-
-            nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+          nativeFlowMessage:
+            proto.Message.InteractiveMessage.NativeFlowMessage.create({
               buttons: [
-                {
-                  name: 'single_select',
-                  buttonParamsJson: JSON.stringify({
-                    title: '📜 Abrir lista',
-                    sections
-                  })
-                },
                 {
                   name: 'quick_reply',
                   buttonParamsJson: JSON.stringify({
@@ -186,14 +176,20 @@ ${theme.footer} Abra a lista ou use os botões rápidos.
                 }
               ]
             })
-          })
-        }
+        })
       }
-    }, { quoted: m })
+    }
+  },
+  { quoted: m }
+)
 
-    await conn.relayMessage(m.chat, msg.message, {
-      messageId: msg.key.id
-    })
+await conn.relayMessage(
+  m.chat,
+  msg.message,
+  {
+    messageId: msg.key.id
+  }
+)
 
     await m.react(theme.footer)
 
