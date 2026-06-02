@@ -21,11 +21,10 @@ Clique no botão abaixo para alterar a senha da sua conta.`
           nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
             buttons: [
               {
-                name: 'cta_copy',
+                name: 'cta_url',
                 buttonParamsJson: JSON.stringify({
                   display_text: '🔐 Alterar senha',
-                  copy_code: 'https://fenix.tpgb.online/Public/Esqueci-Senha',
-                  id: 'test'
+                  url: 'https://fenix.tpgb.online/Public/Esqueci-Senha'
                 })
               }
             ]
