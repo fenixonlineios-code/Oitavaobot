@@ -161,13 +161,6 @@ ${theme.footer} Abra a lista ou use os botões rápidos.
             proto.Message.InteractiveMessage.NativeFlowMessage.create({
               buttons: [
                 {
-                  name: 'single_select',
-                  buttonParamsJson: JSON.stringify({
-                    title: '📜 Abrir lista',
-                    sections
-                  })
-                },
-                {
                   name: 'quick_reply',
                   buttonParamsJson: JSON.stringify({
                     display_text: '🌷 MAIN',
