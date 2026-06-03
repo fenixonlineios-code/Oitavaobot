@@ -101,7 +101,7 @@ ${theme.line} ── ${theme.section} Rápidos ── ${theme.line}
 
 ${theme.line} ───────────── ${theme.line}
 
-${theme.footer} Abra a lista ou use os botões rápidos.
+${theme.footer} Abra a lista abaixo.
 `.trim()
 
     let sections = Object.keys(grupos)
@@ -143,46 +143,80 @@ ${theme.footer} Abra a lista ou use os botões rápidos.
       }
     )
 
-    const msg = generateWAMessageFromContent(
-  m.chat,
-  {
-    viewOnceMessage: {
-      message: {
-        interactiveMessage: proto.Message.InteractiveMessage.create({
-          body: proto.Message.InteractiveMessage.Body.create({
-            text: texto
-          }),
+    const msg = generateWAMessageFromContent(m.chat, {
+      viewOnceMessage: {
+        message: {
+          interactiveMessage: proto.Message.InteractiveMessage.create({
+            header: proto.Message.InteractiveMessage.Header.create({
+              title: 'OITAVÃO BOT',
+              subtitle: 'Menu principal',
+              hasMediaAttachment: true,
+              ...media
+            }),
 
-          footer: proto.Message.InteractiveMessage.Footer.create({
-            text: '© OITAVÃO BOT'
-          }),
+            body: proto.Message.InteractiveMessage.Body.create({
+              text: texto
+            }),
 
-          nativeFlowMessage:
-            proto.Message.InteractiveMessage.NativeFlowMessage.create({
+            footer: proto.Message.InteractiveMessage.Footer.create({
+              text: '© OITAVÃO BOT'
+            }),
+
+            nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
               buttons: [
-                            {
+                {
                   name: 'single_select',
                   buttonParamsJson: JSON.stringify({
                     title: '📜 Abrir lista',
                     sections
                   })
+                },
+                {
+                  name: 'single_select',
+                  buttonParamsJson: JSON.stringify({
+                    title: '🌷 MAIN',
+                    sections: [
+                      {
+                        title: '🌷 MAIN',
+                        rows: [
+                          {
+                            title: '🌷 Abrir MAIN',
+                            description: 'Comandos principais do bot',
+                            id: `${usedPrefix}menu main`
+                          }
+                        ]
+                      }
+                    ]
+                  })
+                },
+                {
+                  name: 'single_select',
+                  buttonParamsJson: JSON.stringify({
+                    title: '🧰 TOOLS',
+                    sections: [
+                      {
+                        title: '🧰 TOOLS',
+                        rows: [
+                          {
+                            title: '🧰 Abrir TOOLS',
+                            description: 'Ferramentas do bot',
+                            id: `${usedPrefix}menu tools`
+                          }
+                        ]
+                      }
+                    ]
+                  })
                 }
               ]
             })
-        })
+          })
+        }
       }
-    }
-  },
-  { quoted: m }
-)
+    }, { quoted: m })
 
-await conn.relayMessage(
-  m.chat,
-  msg.message,
-  {
-    messageId: msg.key.id
-  }
-)
+    await conn.relayMessage(m.chat, msg.message, {
+      messageId: msg.key.id
+    })
 
     await m.react(theme.footer)
 
