@@ -166,13 +166,6 @@ ${theme.footer} Abra a lista ou use os botões rápidos.
                     title: '📜 Abrir lista',
                     sections
                   })
-                },
-                {
-                  name: 'quick_reply',
-                  buttonParamsJson: JSON.stringify({
-                    display_text: '🧰 TOOLS',
-                    id: `${usedPrefix}menu tools`
-                  })
                 }
               ]
             })
