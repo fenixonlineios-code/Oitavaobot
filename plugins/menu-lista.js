@@ -172,21 +172,10 @@ ${theme.footer} Abra a lista abaixo.
                   })
                 },
                 {
-                  name: 'single_select',
+                  name: 'quick_reply',
                   buttonParamsJson: JSON.stringify({
-                    title: '🌷 MAIN',
-                    sections: [
-                      {
-                        title: '🌷 MAIN',
-                        rows: [
-                          {
-                            title: '🌷 Abrir MAIN',
-                            description: 'Comandos principais do bot',
-                            id: `${usedPrefix}menu main`
-                          }
-                        ]
-                      }
-                    ]
+                    display_text: '🌷 MAIN',
+                    id: `${usedPrefix}menu main`
                   })
                 },
                 {
