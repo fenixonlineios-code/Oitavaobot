@@ -177,24 +177,6 @@ ${theme.footer} Abra a lista abaixo.
                     display_text: '🌷 MAIN',
                     id: `${usedPrefix}menu main`
                   })
-                },
-                {
-                  name: 'single_select',
-                  buttonParamsJson: JSON.stringify({
-                    title: '🧰 TOOLS',
-                    sections: [
-                      {
-                        title: '🧰 TOOLS',
-                        rows: [
-                          {
-                            title: '🧰 Abrir TOOLS',
-                            description: 'Ferramentas do bot',
-                            id: `${usedPrefix}menu tools`
-                          }
-                        ]
-                      }
-                    ]
-                  })
                 }
               ]
             })
