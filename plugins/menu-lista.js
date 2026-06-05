@@ -125,7 +125,8 @@ ${theme.footer} Abra a lista abaixo.
             {
               title: '🌷 Menu principal',
               description: 'Abrir menu principal',
-              id: `${usedPrefix}menu main`
+              id: `${usedPrefix}menu main`,
+              button_id: `${usedPrefix}menu main`
             }
           ]
         }
