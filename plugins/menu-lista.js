@@ -174,8 +174,17 @@ ${theme.footer} Abra a lista abaixo.
                 {
                   name: 'quick_reply',
                   buttonParamsJson: JSON.stringify({
+                    display_text: '🧰 TOOLS',
+                    id: `${usedPrefix}menu tools`,
+                    button_id: `${usedPrefix}menu tools`
+                  })
+                },
+                {
+                  name: 'quick_reply',
+                  buttonParamsJson: JSON.stringify({
                     display_text: '🌷 MAIN',
-                    id: `${usedPrefix}menu main`
+                    id: `${usedPrefix}menu main`,
+                    button_id: `${usedPrefix}menu main`
                   })
                 }
               ]
