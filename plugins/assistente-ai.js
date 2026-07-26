@@ -60,20 +60,29 @@ async function before(m, { conn }) {
 
     console.log(
       'RESPOSTA RAW:',
-      raw.slice(0, 1000)
+      raw.slice(0, 3000)
     )
 
     let data
 
     try {
       data = JSON.parse(raw)
-    } catch {
+    } catch (e) {
+      console.error('❌ ERRO AO INTERPRETAR JSON:', e)
+
       await m.react?.('❌')
+
       await m.reply(
         '❌ A API respondeu algo que não é JSON. Veja o log RAW.'
       )
+
       return true
     }
+
+    console.log('━━━━━━━━━━━━━━━━━━━━')
+    console.log('🤖 DADOS DA IA')
+    console.log(JSON.stringify(data, null, 2))
+    console.log('━━━━━━━━━━━━━━━━━━━━')
 
     if (!res.ok) {
       await m.react?.('❌')
@@ -85,46 +94,68 @@ async function before(m, { conn }) {
       return true
     }
 
-    // ============================
-    // RESPOSTA NORMAL
-    // ============================
+    const texto =
+      data.resposta ||
+      'Não veio resposta.'
 
-    const texto = data.resposta || 'Não veio resposta.'
-
-    // ============================
-    // SE A IA MANDAR BOTÕES
-    // ============================
+    // =====================================================
+    // BOTÕES NORMAIS
+    // =====================================================
 
     if (
-      Array.isArray(data.botoes) &&
-      data.botoes.length > 0
+      data.tipo === 'botoes' &&
+      Array.isArray(data.botoes)
     ) {
 
-      const buttons = data.botoes.map(botao => ({
-        name: 'quick_reply',
-        buttonParamsJson: JSON.stringify({
-          display_text: botao.texto,
-          id: botao.id
-        })
-      }))
+      // Só aceita botões que tenham texto E ID
+      const botoesValidos = data.botoes.filter(botao => {
+        return (
+          botao &&
+          typeof botao.texto === 'string' &&
+          botao.texto.trim() !== '' &&
+          typeof botao.id === 'string' &&
+          botao.id.trim() !== ''
+        )
+      })
 
-      await conn.sendMessage(
-        m.chat,
-        {
-          text: texto,
-          buttons
-        },
-        {
-          quoted: m
-        }
+      console.log(
+        '🔘 BOTÕES VÁLIDOS:',
+        JSON.stringify(botoesValidos, null, 2)
       )
 
-      return true
+      if (botoesValidos.length > 0) {
+
+        const buttons = botoesValidos.map(botao => ({
+          buttonId: botao.id.trim(),
+
+          buttonText: {
+            displayText: botao.texto.trim()
+          },
+
+          type: 1
+        }))
+
+        await conn.sendMessage(
+          m.chat,
+          {
+            text: texto,
+            footer: 'OITAVÃO BOT',
+            buttons,
+            headerType: 1
+          },
+          {
+            quoted: m
+          }
+        )
+
+        return true
+      }
     }
 
-    // ============================
-    // SEM BOTÕES
-    // ============================
+    // =====================================================
+    // FALLBACK
+    // Se não houver botões válidos, envia texto
+    // =====================================================
 
     await conn.sendMessage(
       m.chat,
@@ -139,7 +170,11 @@ async function before(m, { conn }) {
     return true
 
   } catch (e) {
-    console.error('ERRO ASSISTENTE IA:', e)
+
+    console.error(
+      '❌ ERRO ASSISTENTE IA:',
+      e
+    )
 
     await m.react?.('❌')
 
