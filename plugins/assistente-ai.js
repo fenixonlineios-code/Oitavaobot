@@ -43,11 +43,9 @@ async function before(m, { conn }) {
 
     const res = await fetch(API_ASSISTENTE, {
       method: 'POST',
-
       headers: {
         'Content-Type': 'application/json'
       },
-
       body: JSON.stringify({
         mensagem: body,
         nome: m.pushName || m.name || 'usuário',
@@ -92,7 +90,7 @@ async function before(m, { conn }) {
     }
 
     // =====================================================
-    // DEBUG COMPLETO DA RESPOSTA DA IA
+    // DEBUG DA RESPOSTA DA IA
     // =====================================================
 
     console.log('━━━━━━━━━━━━━━━━━━━━')
@@ -103,7 +101,7 @@ async function before(m, { conn }) {
     console.log('━━━━━━━━━━━━━━━━━━━━')
 
     // =====================================================
-    // ERRO HTTP DA API
+    // ERRO HTTP
     // =====================================================
 
     if (!res.ok) {
@@ -130,17 +128,7 @@ async function before(m, { conn }) {
         : 'Não veio resposta.'
 
     // =====================================================
-    // BOTÕES
-    //
-    // IMPORTANTE:
-    // Não verificamos data.tipo.
-    //
-    // Mesmo que a IA mande:
-    //
-    // "tipo": "texto",
-    // "botoes": [...]
-    //
-    // os botões serão enviados.
+    // BOTÕES DA IA
     // =====================================================
 
     if (
@@ -148,18 +136,15 @@ async function before(m, { conn }) {
       data.botoes.length > 0
     ) {
 
-      // Remove botões vazios ou sem ID
-      const botoesValidos =
-        data.botoes.filter(botao => {
-
-          return (
-            botao &&
-            typeof botao.texto === 'string' &&
-            botao.texto.trim() !== '' &&
-            typeof botao.id === 'string' &&
-            botao.id.trim() !== ''
-          )
-        })
+      const botoesValidos = data.botoes.filter(botao => {
+        return (
+          botao &&
+          typeof botao.texto === 'string' &&
+          botao.texto.trim() !== '' &&
+          typeof botao.id === 'string' &&
+          botao.id.trim() !== ''
+        )
+      })
 
       console.log(
         '🔘 BOTÕES VÁLIDOS:',
@@ -170,85 +155,48 @@ async function before(m, { conn }) {
         )
       )
 
-   // ============================
-// SE A IA MANDAR BOTÕES
-// ============================
+      if (botoesValidos.length > 0) {
 
-if (
-  Array.isArray(data.botoes) &&
-  data.botoes.length > 0
-) {
+        const buttons = botoesValidos.map(botao => ({
+          name: 'quick_reply',
 
-  const botoesValidos = data.botoes.filter(botao => {
-    return (
-      botao &&
-      typeof botao.texto === 'string' &&
-      botao.texto.trim() !== '' &&
-      typeof botao.id === 'string' &&
-      botao.id.trim() !== ''
-    )
-  })
+          buttonParamsJson: JSON.stringify({
+            display_text: botao.texto.trim(),
+            id: botao.id.trim()
+          })
+        }))
 
-  console.log(
-    '🔘 BOTÕES VÁLIDOS:',
-    JSON.stringify(
-      botoesValidos,
-      null,
-      2
-    )
-  )
+        console.log(
+          '📤 BOTÕES ENVIADOS:',
+          JSON.stringify(
+            buttons,
+            null,
+            2
+          )
+        )
 
-  if (botoesValidos.length > 0) {
+        await conn.sendMessage(
+          m.chat,
+          {
+            text: texto,
+            buttons: buttons
+          },
+          {
+            quoted: m
+          }
+        )
 
-    const buttons = botoesValidos.map(botao => ({
-      buttonId: botao.id.trim(),
+        console.log(
+          '✅ MENSAGEM COM BOTÕES ENVIADA'
+        )
 
-      buttonText: {
-        displayText: botao.texto.trim()
-      },
-
-      type: 1
-    }))
-
-    console.log(
-      '📤 BOTÕES ENVIADOS:',
-      JSON.stringify(
-        buttons,
-        null,
-        2
-      )
-    )
-
-    await conn.sendMessage(
-      m.chat,
-      {
-        text: texto,
-
-        footer: 'OITAVÃO BOT',
-
-        buttons: buttons,
-
-        headerType: 1
-      },
-      {
-        quoted: m
+        return true
       }
-    )
+    }
 
-    return true
-  }
-}
-      
     // =====================================================
-    // SEM BOTÕES
-    //
-    // Se a IA não mandar botões válidos,
-    // envia somente o texto.
+    // RESPOSTA NORMAL SEM BOTÕES
     // =====================================================
-
-    console.log(
-      'ℹ️ Nenhum botão válido encontrado.'
-    )
 
     await conn.sendMessage(
       m.chat,
@@ -258,6 +206,10 @@ if (
       {
         quoted: m
       }
+    )
+
+    console.log(
+      '✅ RESPOSTA NORMAL ENVIADA'
     )
 
     return true
