@@ -171,21 +171,56 @@ const yt = {
 }
 
 async function faststart(buffer) {
-  const i = `./in_${Date.now()}.mp4`
-  const o = `./out_${Date.now()}.mp4`
+  const timestamp = Date.now()
+  const i = `./in_${timestamp}.mp4`
+  const o = `./out_${timestamp}.mp4`
+
   fs.writeFileSync(i, buffer)
 
   const run = args =>
-    new Promise((res, rej) => {
-      spawn('ffmpeg', args)
-        .on('close', c => (c === 0 ? res() : rej()))
+    new Promise((resolve, reject) => {
+      const processo = spawn(ffmpegPath, args)
+
+      let stderr = ''
+
+      processo.stderr.on('data', data => {
+        stderr += data.toString()
+      })
+
+      processo.on('error', error => {
+        reject(error)
+      })
+
+      processo.on('close', code => {
+        if (code === 0) {
+          resolve()
+        } else {
+          reject(
+            new Error(
+              `FFmpeg terminou com código ${code}\n${stderr}`
+            )
+          )
+        }
+      })
     })
 
   try {
-    await run(['-y', '-i', i, '-c', 'copy', '-movflags', '+faststart', o])
-  } catch {
     await run([
-      '-y', '-i', i,
+      '-y',
+      '-i', i,
+      '-c', 'copy',
+      '-movflags', '+faststart',
+      o
+    ])
+  } catch (erro) {
+    console.error(
+      '⚠️ FFmpeg copy falhou, tentando recodificar:',
+      erro
+    )
+
+    await run([
+      '-y',
+      '-i', i,
       '-c:v', 'libx264',
       '-c:a', 'aac',
       '-movflags', '+faststart',
@@ -194,7 +229,14 @@ async function faststart(buffer) {
   }
 
   const out = fs.readFileSync(o)
-  fs.unlinkSync(i)
-  fs.unlinkSync(o)
+
+  if (fs.existsSync(i)) {
+    fs.unlinkSync(i)
+  }
+
+  if (fs.existsSync(o)) {
+    fs.unlinkSync(o)
+  }
+
   return out
 }
