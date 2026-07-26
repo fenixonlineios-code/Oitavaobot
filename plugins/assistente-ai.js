@@ -170,55 +170,75 @@ async function before(m, { conn }) {
         )
       )
 
-      // ===================================================
-      // SE EXISTIREM BOTÕES VÁLIDOS
-      // ===================================================
+   // ============================
+// SE A IA MANDAR BOTÕES
+// ============================
 
-      if (botoesValidos.length > 0) {
+if (
+  Array.isArray(data.botoes) &&
+  data.botoes.length > 0
+) {
 
-        const buttons =
-          botoesValidos.map(botao => ({
+  const botoesValidos = data.botoes.filter(botao => {
+    return (
+      botao &&
+      typeof botao.texto === 'string' &&
+      botao.texto.trim() !== '' &&
+      typeof botao.id === 'string' &&
+      botao.id.trim() !== ''
+    )
+  })
 
-            name: 'quick_reply',
+  console.log(
+    '🔘 BOTÕES VÁLIDOS:',
+    JSON.stringify(
+      botoesValidos,
+      null,
+      2
+    )
+  )
 
-            buttonParamsJson:
-              JSON.stringify({
+  if (botoesValidos.length > 0) {
 
-                display_text:
-                  botao.texto.trim(),
+    const buttons = botoesValidos.map(botao => ({
+      buttonId: botao.id.trim(),
 
-                id:
-                  botao.id.trim()
+      buttonText: {
+        displayText: botao.texto.trim()
+      },
 
-              })
+      type: 1
+    }))
 
-          }))
+    console.log(
+      '📤 BOTÕES ENVIADOS:',
+      JSON.stringify(
+        buttons,
+        null,
+        2
+      )
+    )
 
-        console.log(
-          '📤 BOTÕES ENVIADOS:',
-          JSON.stringify(
-            buttons,
-            null,
-            2
-          )
-        )
+    await conn.sendMessage(
+      m.chat,
+      {
+        text: texto,
 
-        await conn.sendMessage(
-          m.chat,
-          {
-            text: texto,
+        footer: 'OITAVÃO BOT',
 
-            buttons: buttons
-          },
-          {
-            quoted: m
-          }
-        )
+        buttons: buttons,
 
-        return true
+        headerType: 1
+      },
+      {
+        quoted: m
       }
-    }
+    )
 
+    return true
+  }
+}
+      
     // =====================================================
     // SEM BOTÕES
     //
