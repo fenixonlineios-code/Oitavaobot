@@ -1,5 +1,6 @@
 import fetch from "node-fetch"
 import yts from "yt-search"
+import ffmpegPath from 'ffmpeg-static'
 import { spawn } from "child_process"
 import fs from "fs"
 
