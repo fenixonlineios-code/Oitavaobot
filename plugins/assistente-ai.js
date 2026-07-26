@@ -6,7 +6,7 @@ async function before(m, { conn }) {
   const body = (m.text || '').trim()
   if (!body) return false
 
-  // ignora comandos com prefixo
+  // Ignora comandos com prefixo
   if (/^[./#!]/.test(body)) return false
 
   const lower = body.toLowerCase()
@@ -33,7 +33,6 @@ async function before(m, { conn }) {
   }
 
   try {
-
     console.log('━━━━━━━━━━━━━━━━━━━━')
     console.log('🤖 ASSISTENTE DEBUG')
     console.log('URL FINAL:', API_ASSISTENTE)
@@ -44,7 +43,9 @@ async function before(m, { conn }) {
 
     const res = await fetch(API_ASSISTENTE, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         mensagem: body,
         nome: m.pushName || m.name || 'usuário',
@@ -56,34 +57,96 @@ async function before(m, { conn }) {
     console.log('CONTENT-TYPE:', res.headers.get('content-type'))
 
     const raw = await res.text()
-    console.log('RESPOSTA RAW:', raw.slice(0, 1000))
+
+    console.log(
+      'RESPOSTA RAW:',
+      raw.slice(0, 1000)
+    )
 
     let data
+
     try {
       data = JSON.parse(raw)
     } catch {
       await m.react?.('❌')
-      await m.reply('❌ A API respondeu algo que não é JSON. Veja o log RAW.')
+      await m.reply(
+        '❌ A API respondeu algo que não é JSON. Veja o log RAW.'
+      )
       return true
     }
 
     if (!res.ok) {
       await m.react?.('❌')
-      await m.reply(`❌ Erro na API: ${res.status}\n\n${data.resposta || raw.slice(0, 300)}`)
+
+      await m.reply(
+        `❌ Erro na API: ${res.status}\n\n${data.resposta || raw.slice(0, 300)}`
+      )
+
       return true
     }
 
-    await conn.sendMessage(m.chat, {
-      text: data.resposta || 'Não veio resposta.'
-    }, { quoted: m })
+    // ============================
+    // RESPOSTA NORMAL
+    // ============================
+
+    const texto = data.resposta || 'Não veio resposta.'
+
+    // ============================
+    // SE A IA MANDAR BOTÕES
+    // ============================
+
+    if (
+      Array.isArray(data.botoes) &&
+      data.botoes.length > 0
+    ) {
+
+      const buttons = data.botoes.map(botao => ({
+        name: 'quick_reply',
+        buttonParamsJson: JSON.stringify({
+          display_text: botao.texto,
+          id: botao.id
+        })
+      }))
+
+      await conn.sendMessage(
+        m.chat,
+        {
+          text: texto,
+          buttons
+        },
+        {
+          quoted: m
+        }
+      )
+
+      return true
+    }
+
+    // ============================
+    // SEM BOTÕES
+    // ============================
+
+    await conn.sendMessage(
+      m.chat,
+      {
+        text: texto
+      },
+      {
+        quoted: m
+      }
+    )
 
     return true
 
   } catch (e) {
     console.error('ERRO ASSISTENTE IA:', e)
+
     await m.react?.('❌')
+
     return true
   }
 }
 
-export default { before }
+export default {
+  before
+}
