@@ -4,6 +4,7 @@ const API_ASSISTENTE = 'https://tpgb.online/api/assistente'
 
 async function before(m, { conn }) {
   const body = (m.text || '').trim()
+
   if (!body) return false
 
   // Ignora comandos com prefixo
@@ -15,7 +16,9 @@ async function before(m, { conn }) {
   const mentionedList =
     Array.isArray(m.mentionedJid)
       ? m.mentionedJid
-      : Array.isArray(m.message?.extendedTextMessage?.contextInfo?.mentionedJid)
+      : Array.isArray(
+          m.message?.extendedTextMessage?.contextInfo?.mentionedJid
+        )
         ? m.message.extendedTextMessage.contextInfo.mentionedJid
         : []
 
@@ -68,10 +71,6 @@ async function before(m, { conn }) {
 
     let data
 
-    // =====================================================
-    // CONVERTE A RESPOSTA DA API PARA JSON
-    // =====================================================
-
     try {
       data = JSON.parse(raw)
     } catch (e) {
@@ -83,15 +82,11 @@ async function before(m, { conn }) {
       await m.react?.('❌')
 
       await m.reply(
-        '❌ A API respondeu algo que não é JSON. Veja o log RAW.'
+        '❌ A API respondeu algo que não é JSON.'
       )
 
       return true
     }
-
-    // =====================================================
-    // DEBUG DA RESPOSTA DA IA
-    // =====================================================
 
     console.log('━━━━━━━━━━━━━━━━━━━━')
     console.log('🤖 DADOS DA IA')
@@ -99,10 +94,6 @@ async function before(m, { conn }) {
       JSON.stringify(data, null, 2)
     )
     console.log('━━━━━━━━━━━━━━━━━━━━')
-
-    // =====================================================
-    // ERRO HTTP
-    // =====================================================
 
     if (!res.ok) {
       await m.react?.('❌')
@@ -117,10 +108,6 @@ async function before(m, { conn }) {
       return true
     }
 
-    // =====================================================
-    // TEXTO DA RESPOSTA
-    // =====================================================
-
     const texto =
       typeof data.resposta === 'string' &&
       data.resposta.trim()
@@ -128,14 +115,13 @@ async function before(m, { conn }) {
         : 'Não veio resposta.'
 
     // =====================================================
-    // BOTÕES DA IA
+    // BOTÕES
     // =====================================================
 
     if (
       Array.isArray(data.botoes) &&
       data.botoes.length > 0
     ) {
-
       const botoesValidos = data.botoes.filter(botao => {
         return (
           botao &&
@@ -156,10 +142,8 @@ async function before(m, { conn }) {
       )
 
       if (botoesValidos.length > 0) {
-
         const buttons = botoesValidos.map(botao => ({
           name: 'quick_reply',
-
           buttonParamsJson: JSON.stringify({
             display_text: botao.texto.trim(),
             id: botao.id.trim()
@@ -179,7 +163,7 @@ async function before(m, { conn }) {
           m.chat,
           {
             text: texto,
-            buttons: buttons
+            buttons
           },
           {
             quoted: m
@@ -195,7 +179,7 @@ async function before(m, { conn }) {
     }
 
     // =====================================================
-    // RESPOSTA NORMAL SEM BOTÕES
+    // SEM BOTÕES
     // =====================================================
 
     await conn.sendMessage(
@@ -215,13 +199,14 @@ async function before(m, { conn }) {
     return true
 
   } catch (e) {
-
     console.error(
       '❌ ERRO ASSISTENTE IA:',
       e
     )
 
-    await m.react?.('❌')
+    try {
+      await m.react?.('❌')
+    } catch {}
 
     return true
   }
