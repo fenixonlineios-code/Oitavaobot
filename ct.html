@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Correio Elegante</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg-deep:#150F2B;
+  --bg-mid:#241A47;
+  --bg-glow:#4A2B7A;
+  --gold:#E8C468;
+  --gold-soft:#F2DA9C;
+  --rose:#FF6B9D;
+  --mint:#7FE8C9;
+  --lilac:#B79CF2;
+  --ink:#F6F2FF;
+  --ink-dim:#B7ACD9;
+  --ink-faint:#8A7FB0;
+  --glass-bd:rgba(246,242,255,.16);
+  --glass-fill:rgba(255,255,255,.06);
+  --shadow-deep:0 30px 60px -20px rgba(6,3,20,.65);
+  --radius-lg:26px;
+  --radius-md:18px;
+  --radius-sm:12px;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(ellipse 90% 55% at 18% -8%, rgba(74,43,122,.85), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 100% 10%, rgba(255,107,157,.18), transparent 55%),
+    radial-gradient(ellipse 80% 60% at 50% 120%, rgba(127,232,201,.12), transparent 55%),
+    linear-gradient(180deg,var(--bg-deep),var(--bg-mid) 45%, #1B1338 100%);
+  background-attachment:fixed;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--rose);color:#1B1338;}
+h1,h2,h3,.display{font-family:'Fraunces',serif;letter-spacing:-.01em;}
+.script{font-family:'Caveat',cursive;}
+a{color:inherit;}
+button{font-family:inherit;}
+::-webkit-scrollbar{width:10px;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:10px;}
+
+/* floating ambient particles */
+#ambient{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.mote{position:absolute;border-radius:50%;filter:blur(1px);opacity:.5;animation:drift linear infinite;}
+@keyframes drift{
+  0%{transform:translateY(110vh) translateX(0) scale(1);}
+  100%{transform:translateY(-10vh) translateX(30px) scale(1.4);opacity:0;}
+}
+
+/* ============ GLASS PRIMITIVES ============ */
+.glass{
+  background:var(--glass-fill);
+  border:1px solid var(--glass-bd);
+  backdrop-filter:blur(22px) saturate(140%);
+  -webkit-backdrop-filter:blur(22px) saturate(140%);
+  box-shadow:var(--shadow-deep), inset 0 1px 0 rgba(255,255,255,.14);
+  border-radius:var(--radius-lg);
+}
+.eyebrow{
+  font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold-soft);font-weight:700;display:flex;align-items:center;gap:8px;
+}
+.eyebrow::before{content:'';width:22px;height:1px;background:var(--gold-soft);opacity:.7;}
+
+/* ============ NAV ============ */
+header.topbar{
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px clamp(16px,4vw,42px);
+  background:rgba(21,15,43,.55);
+  backdrop-filter:blur(18px) saturate(150%);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.brand{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;}
+.brand-mark{width:38px;height:30px;position:relative;filter:drop-shadow(0 6px 10px rgba(232,196,104,.35));}
+.brand-mark svg{width:100%;height:100%;}
+.brand-name{font-family:'Fraunces',serif;font-size:1.18rem;font-weight:600;line-height:1;}
+.brand-name small{display:block;font-family:'Plus Jakarta Sans';font-size:.62rem;letter-spacing:.14em;color:var(--ink-faint);font-weight:600;text-transform:uppercase;margin-top:2px;}
+
+nav.tabs{display:flex;gap:4px;background:rgba(255,255,255,.05);border:1px solid var(--glass-bd);padding:4px;border-radius:999px;}
+nav.tabs button{
+  border:none;background:transparent;color:var(--ink-dim);
+  padding:9px 16px;border-radius:999px;font-size:.86rem;font-weight:600;cursor:pointer;
+  transition:color .25s var(--ease), background .35s var(--ease), transform .25s var(--ease);
+  display:flex;align-items:center;gap:6px;white-space:nowrap;
+}
+nav.tabs button:hover{color:var(--ink);}
+nav.tabs button.active{background:linear-gradient(135deg,var(--gold),#d9a94e);color:#241503;box-shadow:0 6px 18px -6px rgba(232,196,104,.6);}
+.who{display:flex;align-items:center;gap:10px;}
+.who .pill{
+  font-size:.76rem;color:var(--ink-dim);background:rgba(255,255,255,.06);
+  border:1px solid var(--glass-bd);padding:7px 12px;border-radius:999px;cursor:pointer;
+}
+@media(max-width:880px){
+  nav.tabs{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:60;box-shadow:var(--shadow-deep);}
+  nav.tabs span.label{display:none;}
+  .who .pill span{display:none;}
+  header.topbar{padding:12px 16px;}
+}
+
+/* ============ HERO / 3D SIGNATURE ============ */
+.hero{
+  position:relative;padding:70px clamp(16px,5vw,60px) 40px;
+  display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;
+  max-width:1280px;margin:0 auto;
+}
+@media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:44px;}}
+.hero-copy .eyebrow{margin-bottom:18px;}
+.hero h1{font-size:clamp(2.3rem,5vw,3.6rem);font-weight:600;line-height:1.05;margin:0 0 18px;}
+.hero h1 em{font-style:italic;font-weight:500;color:var(--gold-soft);}
+.hero p.lede{color:var(--ink-dim);font-size:1.05rem;line-height:1.65;max-width:46ch;margin:0 0 30px;}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
+
+.btn{
+  border:none;cursor:pointer;font-weight:700;font-size:.92rem;border-radius:999px;
+  padding:14px 26px;display:inline-flex;align-items:center;gap:9px;
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease), filter .3s;
+}
+.btn:active{transform:scale(.96);}
+.btn-primary{background:linear-gradient(135deg,var(--gold),#d9a94e);color:#241503;box-shadow:0 14px 30px -10px rgba(232,196,104,.55);}
+.btn-primary:hover{transform:translateY(-2px);filter:brightness(1.06);}
+.btn-ghost{background:rgba(255,255,255,.06);border:1px solid var(--glass-bd);color:var(--ink);}
+.btn-ghost:hover{background:rgba(255,255,255,.12);}
+.btn-sm{padding:9px 16px;font-size:.78rem;border-radius:999px;}
+.btn-danger{background:rgba(255,90,110,.16);color:#ffb3bf;border:1px solid rgba(255,90,110,.3);}
+.btn-mint{background:rgba(127,232,201,.16);color:var(--mint);border:1px solid rgba(127,232,201,.35);}
+
+/* 3D scene */
+.scene{
+  perspective:1300px;height:420px;position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.scene-stage{width:100%;height:100%;position:relative;transform-style:preserve-3d;}
+.env{
+  position:absolute;width:210px;height:140px;left:50%;top:50%;
+  transform-style:preserve-3d;
+  animation:float 7s ease-in-out infinite;
+  will-change:transform;
+}
+.env.e1{margin:-70px 0 0 -160px;--seal:var(--gold);animation-delay:0s;}
+.env.e2{margin:-45px 0 0 10px;--seal:var(--rose);animation-delay:1.4s;transform:scale(.82) rotateZ(6deg);}
+.env.e3{margin:20px 0 0 -95px;--seal:var(--mint);animation-delay:2.6s;transform:scale(.7) rotateZ(-9deg);}
+@keyframes float{
+  0%,100%{transform:translateY(0) rotateZ(var(--rz,0deg)) rotateY(-8deg);}
+  50%{transform:translateY(-22px) rotateZ(calc(var(--rz,0deg) + 2deg)) rotateY(8deg);}
+}
+.env-body{
+  position:absolute;inset:0;border-radius:14px;
+  background:linear-gradient(155deg, rgba(255,255,255,.22), rgba(255,255,255,.04) 55%);
+  border:1px solid rgba(255,255,255,.35);
+  backdrop-filter:blur(6px);
+  box-shadow:0 24px 46px -18px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.4);
+}
+.env-flap{
+  position:absolute;left:0;right:0;top:0;height:76px;
+  background:linear-gradient(160deg, rgba(255,255,255,.30), rgba(255,255,255,.06));
+  clip-path:polygon(0 0,100% 0,50% 88%);
+  border-radius:14px 14px 0 0;
+  transform-origin:top center;transform:rotateX(0deg);
+  border:1px solid rgba(255,255,255,.4);border-bottom:none;
+  animation:flap 7s ease-in-out infinite;
+  animation-delay:inherit;
+}
+@keyframes flap{
+  0%,40%,100%{transform:rotateX(0deg);}
+  55%,80%{transform:rotateX(-165deg);}
+}
+.env-seal{
+  position:absolute;left:50%;top:58px;width:34px;height:34px;margin:-17px 0 0 -17px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--seal) 88%, white), var(--seal) 70%);
+  box-shadow:0 8px 16px -4px rgba(0,0,0,.5), inset 0 -3px 6px rgba(0,0,0,.25);
+  display:flex;align-items:center;justify-content:center;font-size:.6rem;color:#241503;font-weight:800;
+}
+.scene-orbit{position:absolute;inset:0;border-radius:50%;border:1px dashed rgba(255,255,255,.08);transform:rotateX(70deg);}
+
+/* ============ SECTIONS / LAYOUT ============ */
+main{max-width:1280px;margin:0 auto;padding:10px clamp(16px,5vw,60px) 120px;position:relative;z-index:1;}
+.view{display:none;animation:viewIn .55s var(--ease);}
+.view.active{display:block;}
+@keyframes viewIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin:36px 0 22px;flex-wrap:wrap;}
+.section-head h2{font-size:clamp(1.5rem,3vw,2.1rem);font-weight:600;margin:6px 0 0;}
+.section-head p{color:var(--ink-dim);margin:6px 0 0;max-width:52ch;font-size:.92rem;}
+
+/* filter chips */
+.chipbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
+.chip{
+  padding:8px 15px;border-radius:999px;font-size:.8rem;font-weight:600;cursor:pointer;
+  background:rgba(255,255,255,.05);border:1px solid var(--glass-bd);color:var(--ink-dim);
+  transition:all .25s var(--ease);
+}
+.chip.active{background:rgba(255,255,255,.14);color:var(--ink);border-color:rgba(255,255,255,.3);}
+
+/* ============ MURAL — flip cards ============ */
+.mural-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px;}
+.card3d{perspective:1400px;height:260px;}
+.card3d-inner{
+  position:relative;width:100%;height:100%;transform-style:preserve-3d;
+  transition:transform .7s var(--ease);cursor:pointer;
+}
+.card3d.flipped .card3d-inner{transform:rotateY(180deg);}
+.card-face{
+  position:absolute;inset:0;border-radius:var(--radius-md);backface-visibility:hidden;
+  padding:20px;display:flex;flex-direction:column;
+}
+.card-front{
+  background:linear-gradient(150deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+  border:1px solid var(--glass-bd);backdrop-filter:blur(16px);
+  justify-content:space-between;
+}
+.card-front .stamp{
+  align-self:flex-end;width:46px;height:46px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--c) 85%, white), var(--c) 75%);
+  box-shadow:0 8px 18px -6px rgba(0,0,0,.5), inset 0 -3px 6px rgba(0,0,0,.2);
+  display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;color:#20130a;
+}
+.card-front .to{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-faint);font-weight:700;}
+.card-front .to strong{display:block;font-family:'Fraunces',serif;font-style:italic;font-size:1.25rem;color:var(--ink);font-weight:500;margin-top:4px;text-transform:none;letter-spacing:0;}
+.card-front .hint{font-size:.74rem;color:var(--ink-faint);}
+.card-back{
+  background:linear-gradient(150deg, rgba(255,255,255,.16), rgba(255,255,255,.05));
+  border:1px solid var(--glass-bd);transform:rotateY(180deg);
+  justify-content:space-between; backdrop-filter:blur(16px);
+}
+.card-back p{font-family:'Caveat',cursive;font-size:1.35rem;line-height:1.35;color:var(--ink);margin:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;}
+.card-back .from{font-size:.72rem;color:var(--ink-faint);border-top:1px dashed var(--glass-bd);padding-top:10px;}
+.empty{
+  grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--ink-faint);
+}
+.empty .glyph{font-size:2.4rem;margin-bottom:10px;}
+
+/* ============ ENVIAR — compose ============ */
+.compose-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:start;}
+@media(max-width:860px){.compose-wrap{grid-template-columns:1fr;}}
+.form-card{padding:30px clamp(20px,3vw,36px);}
+.field{margin-bottom:18px;}
+.field label{display:block;font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);margin-bottom:8px;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:520px){.field-row{grid-template-columns:1fr;}}
+input[type=text], textarea, select{
+  width:100%;padding:13px 15px;border-radius:var(--radius-sm);
+  background:rgba(0,0,0,.18);border:1px solid var(--glass-bd);color:var(--ink);
+  font-family:inherit;font-size:.94rem;transition:border-color .25s, box-shadow .25s;
+}
+input::placeholder, textarea::placeholder{color:var(--ink-faint);}
+input:focus, textarea:focus, select:focus{outline:none;border-color:var(--gold-soft);box-shadow:0 0 0 3px rgba(232,196,104,.18);}
+textarea{resize:vertical;min-height:110px;line-height:1.5;}
+.charcount{text-align:right;font-size:.72rem;color:var(--ink-faint);margin-top:5px;}
+
+.envelope-swatches{display:flex;gap:10px;}
+.swatch{
+  width:44px;height:44px;border-radius:50%;cursor:pointer;position:relative;
+  border:2px solid transparent;transition:transform .25s var(--ease);
+}
+.swatch:hover{transform:translateY(-3px);}
+.swatch.sel{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.18);}
+.swatch[data-c="dourado"]{background:radial-gradient(circle at 35% 30%,#f6df9e,#d9a94e);}
+.swatch[data-c="rosa"]{background:radial-gradient(circle at 35% 30%,#ffb2cd,#ff6b9d);}
+.swatch[data-c="menta"]{background:radial-gradient(circle at 35% 30%,#c3f7e6,#7fe8c9);}
+.swatch[data-c="lilas"]{background:radial-gradient(circle at 35% 30%,#ddccff,#b79cf2);}
+
+.switch-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px dashed var(--glass-bd);margin-top:6px;}
+.switch-row span{font-size:.86rem;color:var(--ink-dim);}
+.switch{width:44px;height:26px;border-radius:999px;background:rgba(255,255,255,.12);position:relative;cursor:pointer;flex-shrink:0;transition:background .25s;}
+.switch::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .3s var(--ease);box-shadow:0 2px 4px rgba(0,0,0,.3);}
+.switch.on{background:linear-gradient(135deg,var(--gold),#d9a94e);}
+.switch.on::after{transform:translateX(18px);}
+
+.seal-submit{
+  width:100%;margin-top:16px;padding:16px;border-radius:999px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--gold),#d9a94e);color:#241503;font-weight:800;font-size:1rem;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 16px 32px -12px rgba(232,196,104,.55);
+  transition:transform .18s var(--ease);
+}
+.seal-submit:active{transform:scale(.94) rotate(-1deg);}
+.seal-submit.sending{pointer-events:none;opacity:.75;}
+
+/* live preview envelope */
+.preview-card{padding:28px;display:flex;flex-direction:column;align-items:center;gap:18px;position:sticky;top:96px;}
+.preview-env{width:100%;max-width:260px;aspect-ratio:3/2;position:relative;perspective:1000px;}
+.preview-env-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .5s var(--ease);}
+.preview-env .body{
+  position:absolute;inset:0;border-radius:16px;
+  background:linear-gradient(155deg, rgba(255,255,255,.24), rgba(255,255,255,.04) 60%);
+  border:1px solid rgba(255,255,255,.35);box-shadow:0 26px 50px -20px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.4);
+}
+.preview-env .flap{
+  position:absolute;left:0;right:0;top:0;height:56%;
+  background:linear-gradient(160deg, rgba(255,255,255,.32), rgba(255,255,255,.06));
+  clip-path:polygon(0 0,100% 0,50% 92%);border-radius:16px 16px 0 0;
+  border:1px solid rgba(255,255,255,.4);border-bottom:none;
+  transform-origin:top center;transition:transform .6s var(--ease);
+}
+.preview-env.open .flap{transform:rotateX(-160deg);}
+.preview-env .seal{
+  position:absolute;left:50%;top:36%;width:15%;aspect-ratio:1;margin-left:-7.5%;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--c,#e8c468) 88%, white), var(--c,#e8c468) 75%);
+  box-shadow:0 8px 16px -4px rgba(0,0,0,.5);z-index:2;
+}
+.preview-hint{font-size:.8rem;color:var(--ink-faint);text-align:center;}
+
+/* ============ MINHA CAIXA ============ */
+.box-lookup{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px;}
+.box-lookup input{flex:1;min-width:160px;}
+.letter-list{display:flex;flex-direction:column;gap:14px;}
+.letter-item{
+  padding:18px 20px;display:flex;gap:16px;align-items:flex-start;cursor:pointer;
+  transition:transform .3s var(--ease);
+}
+.letter-item:hover{transform:translateX(4px);}
+.letter-item .dot{width:12px;height:12px;border-radius:50%;margin-top:6px;flex-shrink:0;box-shadow:0 0 0 4px rgba(255,255,255,.06);}
+.letter-item .body{flex:1;}
+.letter-item .body .top{display:flex;justify-content:space-between;gap:10px;font-size:.72rem;color:var(--ink-faint);}
+.letter-item .body p{margin:6px 0 0;font-family:'Caveat',cursive;font-size:1.2rem;color:var(--ink-dim);}
+.letter-item.open .body p{color:var(--ink);-webkit-line-clamp:unset;}
+.letter-item .body p{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+
+/* ============ ADMIN ============ */
+.gate{max-width:420px;margin:60px auto;padding:36px;text-align:center;}
+.gate h3{margin:14px 0 6px;font-size:1.4rem;}
+.gate p{color:var(--ink-dim);font-size:.88rem;margin-bottom:20px;}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:26px;}
+.stat{padding:20px;}
+.stat .n{font-family:'Fraunces',serif;font-size:2rem;font-weight:600;}
+.stat .l{font-size:.75rem;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.08em;margin-top:4px;}
+.admin-table{width:100%;border-collapse:collapse;font-size:.86rem;}
+.admin-table th{text-align:left;padding:10px 12px;color:var(--ink-faint);font-weight:700;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--glass-bd);}
+.admin-table td{padding:12px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top;}
+.admin-table tr:hover td{background:rgba(255,255,255,.03);}
+.msgpeek{max-width:260px;color:var(--ink-dim);font-style:italic;}
+.badge{padding:4px 10px;border-radius:999px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+.badge.pendente{background:rgba(232,196,104,.15);color:var(--gold-soft);}
+.badge.aprovada{background:rgba(127,232,201,.15);color:var(--mint);}
+.badge.rejeitada{background:rgba(255,107,157,.15);color:var(--rose);}
+.rowbtns{display:flex;gap:6px;}
+.iconbtn{width:30px;height:30px;border-radius:8px;border:1px solid var(--glass-bd);background:rgba(255,255,255,.05);color:var(--ink-dim);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.iconbtn:hover{background:rgba(255,255,255,.12);color:var(--ink);}
+.admin-table-wrap{overflow-x:auto;padding:8px;}
+.admin-toolbar{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+
+.config-box{padding:26px;margin-top:30px;}
+.config-box textarea, .config-box input{font-family:monospace;font-size:.82rem;}
+.config-box .sql{
+  background:rgba(0,0,0,.35);border-radius:var(--radius-sm);padding:16px;font-family:monospace;
+  font-size:.76rem;color:var(--mint);white-space:pre-wrap;line-height:1.6;max-height:260px;overflow:auto;border:1px solid var(--glass-bd);
+}
+.tag-mode{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--glass-bd);color:var(--ink-dim);}
+.tag-mode.live{color:var(--mint);}
+.tag-mode .dotpulse{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 0 currentColor;animation:pulse 2s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(127,232,201,.5);}70%{box-shadow:0 0 0 8px rgba(127,232,201,0);}100%{box-shadow:0 0 0 0 rgba(127,232,201,0);}}
+
+/* ============ MODALS / TOASTS ============ */
+.overlay{position:fixed;inset:0;background:rgba(8,5,20,.62);backdrop-filter:blur(6px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+.overlay.show{opacity:1;pointer-events:auto;}
+.modal{max-width:440px;width:100%;padding:32px;transform:translateY(18px) scale(.97);transition:transform .35s var(--ease);}
+.overlay.show .modal{transform:translateY(0) scale(1);}
+.modal h3{margin:0 0 6px;font-size:1.3rem;}
+.modal p{color:var(--ink-dim);font-size:.86rem;line-height:1.55;margin:0 0 20px;}
+.modal .actions{display:flex;gap:10px;margin-top:22px;}
+.modal .actions .btn{flex:1;justify-content:center;}
+
+#toasts{position:fixed;bottom:90px;right:20px;z-index:200;display:flex;flex-direction:column;gap:10px;align-items:flex-end;}
+@media(max-width:880px){#toasts{bottom:100px;right:12px;left:12px;align-items:center;}}
+.toast{
+  padding:14px 18px;border-radius:14px;display:flex;align-items:center;gap:10px;
+  animation:toastIn .4s var(--ease);font-size:.86rem;font-weight:600;max-width:340px;
+}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px) scale(.94);}to{opacity:1;transform:translateY(0) scale(1);}}
+.toast.ok{background:rgba(127,232,201,.14);border:1px solid rgba(127,232,201,.35);color:var(--mint);}
+.toast.err{background:rgba(255,107,157,.14);border:1px solid rgba(255,107,157,.35);color:var(--rose);}
+
+/* confetti canvas */
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:150;}
+
+footer{text-align:center;padding:40px 20px 100px;color:var(--ink-faint);font-size:.78rem;position:relative;z-index:1;}
+footer strong{color:var(--ink-dim);}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
+}
+</style>
+</head>
+<body>
+
+<div id="ambient"></div>
+<div id="confetti"></div>
+<div id="toasts"></div>
+
+<header class="topbar">
+  <div class="brand" onclick="go('mural')">
+    <div class="brand-mark">
+      <svg viewBox="0 0 40 32" fill="none">
+        <rect x="1" y="4" width="38" height="27" rx="5" fill="url(#g1)" stroke="#F6F2FF" stroke-opacity=".4"/>
+        <path d="M2 6 L20 20 L38 6" stroke="#F6F2FF" stroke-opacity=".55" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <circle cx="20" cy="17" r="4.4" fill="#E8C468"/>
+        <defs><linearGradient id="g1" x1="0" y1="0" x2="40" y2="32"><stop stop-color="#ffffff" stop-opacity=".28"/><stop offset="1" stop-color="#ffffff" stop-opacity=".04"/></linearGradient></defs>
+      </svg>
+    </div>
+    <div class="brand-name">Correio Elegante<small id="schoolNameTag">Colégio Fênix</small></div>
+  </div>
+
+  <nav class="tabs" id="tabs">
+    <button data-view="mural" class="active">✉️ <span class="label">Mural</span></button>
+    <button data-view="enviar">🪶 <span class="label">Enviar</span></button>
+    <button data-view="caixa">📬 <span class="label">Minha Caixa</span></button>
+    <button data-view="admin">🔐 <span class="label">Admin</span></button>
+  </nav>
+
+  <div class="who">
+    <div class="pill" id="identityPill" onclick="openIdentityModal()">👤 <span id="identityLabel">Definir nome</span></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===================== MURAL ===================== -->
+  <section class="view active" id="view-mural">
+    <div class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">Tradição da escola, versão digital</div>
+        <h1>Envie um <em>recado</em> que vira<br>lembrança de verdade.</h1>
+        <p class="lede">Escreva um bilhete, escolha a cor do envelope, cole o selo de cera e deixe que ele apareça no mural — ou chegue direto na caixa de quem você quiser.</p>
+        <div class="hero-cta">
+          <button class="btn btn-primary" onclick="go('enviar')">Escrever um bilhete →</button>
+          <button class="btn btn-ghost" onclick="go('caixa')">Ver minha caixa</button>
+        </div>
+      </div>
+      <div class="scene">
+        <div class="scene-orbit"></div>
+        <div class="scene-stage" id="heroStage">
+          <div class="env e1"><div class="env-body"></div><div class="env-flap"></div><div class="env-seal">CE</div></div>
+          <div class="env e2"><div class="env-body"></div><div class="env-flap"></div><div class="env-seal">♥</div></div>
+          <div class="env e3"><div class="env-body"></div><div class="env-flap"></div><div class="env-seal">✦</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Mural público</div>
+        <h2>Bilhetes aprovados</h2>
+        <p>Clique em um envelope para abri-lo e ler o recado.</p>
+      </div>
+      <span class="tag-mode" id="modeTag"><span class="dotpulse"></span> <span id="modeTagText">carregando…</span></span>
+    </div>
+
+    <div class="chipbar">
+      <div class="chip active" data-filter="todos">Todos</div>
+      <div class="chip" data-filter="dourado">Dourado</div>
+      <div class="chip" data-filter="rosa">Rosa</div>
+      <div class="chip" data-filter="menta">Menta</div>
+      <div class="chip" data-filter="lilas">Lilás</div>
+    </div>
+
+    <div class="mural-grid" id="muralGrid"></div>
+  </section>
+
+  <!-- ===================== ENVIAR ===================== -->
+  <section class="view" id="view-enviar">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Novo bilhete</div>
+        <h2>Escreva com carinho</h2>
+        <p>Seu recado passa por uma breve moderação antes de aparecer no mural — a não ser que você o envie só para a caixa de alguém.</p>
+      </div>
+    </div>
+
+    <div class="compose-wrap">
+      <form class="glass form-card" id="composeForm">
+        <div class="field-row">
+          <div class="field">
+            <label>Seu nome</label>
+            <input type="text" id="fRemetenteNome" placeholder="Como você se chama" required>
+          </div>
+          <div class="field">
+            <label>Sua turma</label>
+            <input type="text" id="fRemetenteTurma" placeholder="Ex: 9º B">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Destinatário</label>
+            <input type="text" id="fDestNome" placeholder="Nome de quem vai receber" required>
+          </div>
+          <div class="field">
+            <label>Turma do destinatário</label>
+            <input type="text" id="fDestTurma" placeholder="Ex: 7º A (ou deixe em branco)">
+          </div>
+        </div>
+        <div class="field">
+          <label>Mensagem</label>
+          <textarea id="fMensagem" maxlength="400" placeholder="Escreva seu recado aqui..." required></textarea>
+          <div class="charcount"><span id="charCount">0</span>/400</div>
+        </div>
+        <div class="field">
+          <label>Cor do envelope</label>
+          <div class="envelope-swatches" id="swatches">
+            <div class="swatch sel" data-c="dourado"></div>
+            <div class="swatch" data-c="rosa"></div>
+            <div class="swatch" data-c="menta"></div>
+            <div class="swatch" data-c="lilas"></div>
+          </div>
+        </div>
+        <div class="switch-row">
+          <span>Enviar como anônimo</span>
+          <div class="switch" id="anonSwitch"></div>
+        </div>
+        <div class="switch-row">
+          <span>Mostrar também no mural público (se aprovado)</span>
+          <div class="switch on" id="publicSwitch"></div>
+        </div>
+        <button type="submit" class="seal-submit" id="submitBtn">🖋️ Selar e enviar</button>
+      </form>
+
+      <div class="glass preview-card">
+        <div class="eyebrow">Pré-visualização</div>
+        <div class="preview-env" id="previewEnv" style="--c:#e8c468">
+          <div class="preview-env-inner">
+            <div class="seal" id="previewSealIcon"></div>
+            <div class="flap"></div>
+            <div class="body"></div>
+          </div>
+        </div>
+        <div class="preview-hint">Toque no envelope para simular a abertura</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MINHA CAIXA ===================== -->
+  <section class="view" id="view-caixa">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Sua correspondência</div>
+        <h2>Minha caixa</h2>
+        <p>Digite seu nome e turma (do jeito que você usou ao mandar recados) para ver o que chegou pra você.</p>
+      </div>
+    </div>
+    <div class="glass" style="padding:22px;">
+      <div class="box-lookup">
+        <input type="text" id="lookupNome" placeholder="Seu nome">
+        <input type="text" id="lookupTurma" placeholder="Sua turma (opcional)">
+        <button class="btn btn-primary" onclick="loadInbox()">Buscar recados</button>
+      </div>
+      <div class="letter-list" id="inboxList"></div>
+    </div>
+  </section>
+
+  <!-- ===================== ADMIN ===================== -->
+  <section class="view" id="view-admin">
+    <div id="adminGate" class="glass gate">
+      <div style="font-size:2.2rem;">🔐</div>
+      <h3>Área da administração</h3>
+      <p>Acesso restrito à equipe responsável pela moderação dos bilhetes.</p>
+      <input type="text" id="adminPass" placeholder="Senha de administrador" style="text-align:center;margin-bottom:14px;">
+      <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="tryAdminLogin()">Entrar</button>
+      <p style="margin-top:14px;font-size:.72rem;">Senha padrão de demonstração: <strong>escola123</strong> — altere em Configuração.</p>
+    </div>
+
+    <div id="adminPanel" style="display:none;">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Painel administrativo</div>
+          <h2>Gestão de mensagens</h2>
+          <p>Aprove, rejeite ou remova bilhetes enviados pelos alunos.</p>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="adminLogout()">Sair</button>
+      </div>
+
+      <div class="stat-row" id="statRow"></div>
+
+      <div class="admin-toolbar">
+        <div class="chipbar" style="margin:0;" id="adminFilterChips">
+          <div class="chip active" data-status="todos">Todos</div>
+          <div class="chip" data-status="pendente">Pendentes</div>
+          <div class="chip" data-status="aprovada">Aprovadas</div>
+          <div class="chip" data-status="rejeitada">Rejeitadas</div>
+        </div>
+        <input type="text" id="adminSearch" placeholder="Buscar por nome..." style="max-width:220px;">
+      </div>
+
+      <div class="glass admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>Quando</th><th>De</th><th>Para</th><th>Mensagem</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody id="adminTbody"></tbody>
+        </table>
+      </div>
+
+      <div class="glass config-box">
+        <div class="eyebrow">Configuração</div>
+        <h3 style="margin:8px 0 4px;">Conectar ao Supabase</h3>
+        <p style="color:var(--ink-dim);font-size:.86rem;margin-bottom:16px;">Cole a URL e a chave anônima (anon key) do seu projeto Supabase para usar um banco de dados real. Sem isso, o site funciona em <strong>modo de demonstração local</strong> (dados salvos apenas neste navegador).</p>
+        <div class="field">
+          <label>Nome da escola</label>
+          <input type="text" id="cfgSchoolName" placeholder="Nome da sua escola">
+        </div>
+        <div class="field">
+          <label>Supabase URL</label>
+          <input type="text" id="cfgUrl" placeholder="https://xxxxx.supabase.co">
+        </div>
+        <div class="field">
+          <label>Supabase Anon Key</label>
+          <input type="text" id="cfgKey" placeholder="eyJhbGciOi...">
+        </div>
+        <div class="field">
+          <label>Senha de administrador</label>
+          <input type="text" id="cfgPass" placeholder="11orteip">
+        </div>
+        <div style="display:flex;gap:10px;margin:14px 0 22px;">
+          <button class="btn btn-primary btn-sm" onclick="saveConfig()">Salvar configuração</button>
+          <button class="btn btn-ghost btn-sm" onclick="clearConfig()">Voltar ao modo demo</button>
+        </div>
+        <label style="font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);">SQL para criar a tabela no Supabase</label>
+        <div class="sql" id="sqlBlock"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>Feito com <strong>♥</strong> para a comunidade escolar — bilhetes gentis fazem escolas melhores.</footer>
+
+<!-- Identity modal -->
+<div class="overlay" id="identityOverlay">
+  <div class="glass modal">
+    <h3>Como você se chama?</h3>
+    <p>Vamos usar isso para preencher seus bilhetes automaticamente e mostrar o que chega na sua caixa.</p>
+    <div class="field"><label>Nome</label><input type="text" id="idName" placeholder="Seu nome"></div>
+    <div class="field"><label>Turma</label><input type="text" id="idTurma" placeholder="Sua turma (opcional)"></div>
+    <div class="actions">
+      <button class="btn btn-ghost" onclick="closeIdentityModal()">Agora não</button>
+      <button class="btn btn-primary" onclick="saveIdentity()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+/* =====================================================================
+   CORREIO ELEGANTE — camada de dados
+   Troca automaticamente entre Supabase (se configurado) e um "modo demo"
+   local (localStorage), para que o site funcione imediatamente.
+===================================================================== */
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const LS_MSGS = 'ce_mensagens_v1';
+const LS_CFG  = 'ce_config_v1';
+const LS_ID   = 'ce_identidade_v1';
+
+function loadConfig(){
+  try{ return JSON.parse(localStorage.getItem(LS_CFG)) || {}; }catch(e){ return {}; }
+}
+let CFG = loadConfig();
+let supabase = null;
+let LIVE = false;
+
+async function initSupabase(){
+  if(CFG.url && CFG.key){
+    try{
+      supabase = createClient(CFG.url, CFG.key);
+      // quick check
+      const { error } = await supabase.from('mensagens').select('id').limit(1);
+      if(error) throw error;
+      LIVE = true;
+    }catch(e){
+      console.warn('Supabase indisponível, usando modo demo local:', e.message);
+      LIVE = false;
+    }
+  } else {
+    LIVE = false;
+  }
+  updateModeTag();
+}
+
+function updateModeTag(){
+  const tag = document.getElementById('modeTag');
+  const txt = document.getElementById('modeTagText');
+  if(LIVE){ tag.classList.add('live'); txt.textContent = 'Conectado ao Supabase'; }
+  else { tag.classList.remove('live'); txt.textContent = 'Modo demonstração local'; }
+}
+
+function localAll(){
+  try{ return JSON.parse(localStorage.getItem(LS_MSGS)) || []; }catch(e){ return []; }
+}
+function localSave(arr){ localStorage.setItem(LS_MSGS, JSON.stringify(arr)); }
+function uid(){ return 'm_' + Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
+
+const DB = {
+  async add(msg){
+    const row = {
+      id: uid(),
+      criado_em: new Date().toISOString(),
+      remetente_nome: msg.remetente_nome,
+      remetente_turma: msg.remetente_turma || '',
+      destinatario_nome: msg.destinatario_nome,
+      destinatario_turma: msg.destinatario_turma || '',
+      mensagem: msg.mensagem,
+      anonimo: !!msg.anonimo,
+      envelope_estilo: msg.envelope_estilo || 'dourado',
+      status: 'pendente',
+      publica: msg.publica !== false
+    };
+    if(LIVE){
+      const { data, error } = await supabase.from('mensagens').insert(row).select().single();
+      if(error) throw error;
+      return data;
+    } else {
+      const all = localAll(); all.unshift(row); localSave(all);
+      return row;
+    }
+  },
+  async listApproved(){
+    if(LIVE){
+      const { data, error } = await supabase.from('mensagens').select('*').eq('status','aprovada').eq('publica', true).order('criado_em', {ascending:false});
+      if(error) throw error;
+      return data;
+    }
+    return localAll().filter(m => m.status === 'aprovada' && m.publica !== false)
+      .sort((a,b)=> new Date(b.criado_em) - new Date(a.criado_em));
+  },
+  async listAll(){
+    if(LIVE){
+      const { data, error } = await supabase.from('mensagens').select('*').order('criado_em', {ascending:false});
+      if(error) throw error;
+      return data;
+    }
+    return localAll().sort((a,b)=> new Date(b.criado_em) - new Date(a.criado_em));
+  },
+  async listForRecipient(nome, turma){
+    const n = (nome||'').trim().toLowerCase();
+    const t = (turma||'').trim().toLowerCase();
+    if(LIVE){
+      let q = supabase.from('mensagens').select('*').ilike('destinatario_nome', `%${n}%`);
+      const { data, error } = await q.order('criado_em', {ascending:false});
+      if(error) throw error;
+      return data.filter(m => !t || (m.destinatario_turma||'').toLowerCase().includes(t));
+    }
+    return localAll().filter(m => (m.destinatario_nome||'').toLowerCase().includes(n) && (!t || (m.destinatario_turma||'').toLowerCase().includes(t)))
+      .sort((a,b)=> new Date(b.criado_em) - new Date(a.criado_em));
+  },
+  async updateStatus(id, status){
+    if(LIVE){
+      const { error } = await supabase.from('mensagens').update({status}).eq('id', id);
+      if(error) throw error;
+    } else {
+      const all = localAll(); const i = all.findIndex(m=>m.id===id);
+      if(i>-1){ all[i].status = status; localSave(all); }
+    }
+  },
+  async remove(id){
+    if(LIVE){
+      const { error } = await supabase.from('mensagens').delete().eq('id', id);
+      if(error) throw error;
+    } else {
+      localSave(localAll().filter(m=>m.id!==id));
+    }
+  }
+};
+
+/* ===================== UI STATE / HELPERS ===================== */
+window.__DB = DB;
+
+function toast(msg, type='ok'){
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = (type==='ok' ? '✓ ' : '⚠ ') + msg;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateY(-8px)'; el.style.transition='all .35s'; setTimeout(()=>el.remove(), 350); }, 3200);
+}
+
+function getIdentity(){
+  try{ return JSON.parse(localStorage.getItem(LS_ID)) || null; }catch(e){ return null; }
+}
+function refreshIdentityPill(){
+  const id = getIdentity();
+  document.getElementById('identityLabel').textContent = id ? `${id.nome}${id.turma? ' · '+id.turma:''}` : 'Definir nome';
+}
+window.openIdentityModal = function(){
+  const id = getIdentity();
+  if(id){ document.getElementById('idName').value = id.nome; document.getElementById('idTurma').value = id.turma||''; }
+  document.getElementById('identityOverlay').classList.add('show');
+};
+window.closeIdentityModal = function(){ document.getElementById('identityOverlay').classList.remove('show'); };
+window.saveIdentity = function(){
+  const nome = document.getElementById('idName').value.trim();
+  const turma = document.getElementById('idTurma').value.trim();
+  if(!nome){ toast('Digite um nome para continuar', 'err'); return; }
+  localStorage.setItem(LS_ID, JSON.stringify({nome, turma}));
+  refreshIdentityPill();
+  document.getElementById('fRemetenteNome').value = nome;
+  document.getElementById('fRemetenteTurma').value = turma;
+  document.getElementById('lookupNome').value = nome;
+  document.getElementById('lookupTurma').value = turma;
+  closeIdentityModal();
+  toast('Identidade salva neste navegador');
+};
+
+/* ===================== NAV ===================== */
+window.go = function(view){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+view).classList.add('active');
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active', b.dataset.view===view));
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(view==='mural') renderMural();
+  if(view==='caixa') loadInbox();
+  if(view==='admin' && adminAuthed) renderAdmin();
+};
+document.querySelectorAll('nav.tabs button').forEach(b=> b.addEventListener('click', ()=> go(b.dataset.view)));
+
+/* ===================== HERO PARALLAX ===================== */
+const stage = document.getElementById('heroStage');
+document.querySelector('.scene').addEventListener('mousemove', (e)=>{
+  const r = e.currentTarget.getBoundingClientRect();
+  const rx = ((e.clientY - r.top)/r.height - .5) * -14;
+  const ry = ((e.clientX - r.left)/r.width - .5) * 18;
+  stage.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+});
+document.querySelector('.scene').addEventListener('mouseleave', ()=>{ stage.style.transform = ''; });
+
+/* ===================== AMBIENT PARTICLES ===================== */
+(function ambient(){
+  const wrap = document.getElementById('ambient');
+  const colors = ['#E8C468','#FF6B9D','#7FE8C9','#B79CF2'];
+  for(let i=0;i<26;i++){
+    const m = document.createElement('div');
+    const size = 3 + Math.random()*5;
+    m.className='mote';
+    m.style.width = m.style.height = size+'px';
+    m.style.left = Math.random()*100+'%';
+    m.style.background = colors[i%colors.length];
+    m.style.animationDuration = (14+Math.random()*18)+'s';
+    m.style.animationDelay = (-Math.random()*20)+'s';
+    wrap.appendChild(m);
+  }
+})();
+
+/* ===================== CONFETTI ===================== */
+function confettiBurst(){
+  const canvas = document.getElementById('confetti');
+  const dpr = window.devicePixelRatio||1;
+  canvas.width = innerWidth*dpr; canvas.height = innerHeight*dpr;
+  canvas.style.width='100%'; canvas.style.height='100%';
+  const ctx = canvas.getContext('2d'); ctx.scale(dpr,dpr);
+  const colors = ['#E8C468','#FF6B9D','#7FE8C9','#B79CF2','#F6F2FF'];
+  const pieces = Array.from({length:120}, ()=>({
+    x: innerWidth/2 + (Math.random()-.5)*120,
+    y: innerHeight*0.35,
+    vx:(Math.random()-.5)*10,
+    vy:-Math.random()*9-4,
+    rot:Math.random()*360, vr:(Math.random()-.5)*14,
+    size: 5+Math.random()*6, color: colors[Math.floor(Math.random()*colors.length)],
+    life: 0
+  }));
+  let frame=0;
+  function step(){
+    frame++;
+    ctx.clearRect(0,0,innerWidth,innerHeight);
+    let alive=false;
+    pieces.forEach(p=>{
+      p.vy += .28; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life++;
+      if(p.y < innerHeight+30) alive = true;
+      ctx.save();
+      ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle = p.color; ctx.globalAlpha = Math.max(0, 1 - p.life/90);
+      ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*.6);
+      ctx.restore();
+    });
+    if(alive && frame<140) requestAnimationFrame(step); else ctx.clearRect(0,0,innerWidth,innerHeight);
+  }
+  step();
+}
+
+/* ===================== MURAL ===================== */
+let muralData = [];
+let muralFilter = 'todos';
+document.querySelectorAll('#view-mural .chip').forEach(c=>{
+  c.addEventListener('click', ()=>{
+    document.querySelectorAll('#view-mural .chip').forEach(x=>x.classList.remove('active'));
+    c.classList.add('active'); muralFilter = c.dataset.filter; paintMural();
+  });
+});
+
+async function renderMural(){
+  const grid = document.getElementById('muralGrid');
+  grid.innerHTML = '<div class="empty"><div class="glyph">⏳</div>Carregando bilhetes…</div>';
+  try{
+    muralData = await DB.listApproved();
+  }catch(e){ toast('Erro ao carregar o mural', 'err'); muralData = []; }
+  paintMural();
+}
+function initials(name){ return (name||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase(); }
+const colorMap = {dourado:'#e8c468', rosa:'#ff6b9d', menta:'#7fe8c9', lilas:'#b79cf2'};
+
+function paintMural(){
+  const grid = document.getElementById('muralGrid');
+  const data = muralFilter==='todos' ? muralData : muralData.filter(m=>m.envelope_estilo===muralFilter);
+  if(!data.length){
+    grid.innerHTML = '<div class="empty"><div class="glyph">🪶</div>Nenhum bilhete por aqui ainda.<br>Seja o primeiro a escrever um!</div>';
+    return;
+  }
+  grid.innerHTML = '';
+  data.forEach((m,idx)=>{
+    const c = colorMap[m.envelope_estilo] || colorMap.dourado;
+    const card = document.createElement('div');
+    card.className = 'card3d';
+    card.style.animation = `viewIn .5s var(--ease) ${idx*.04}s both`;
+    card.innerHTML = `
+      <div class="card3d-inner">
+        <div class="card-face card-front">
+          <div class="to">Para<strong>${escapeHTML(m.destinatario_nome)}</strong>${m.destinatario_turma? '<div style="font-size:.7rem;margin-top:2px;color:var(--ink-faint);">'+escapeHTML(m.destinatario_turma)+'</div>':''}</div>
+          <div class="hint">toque para abrir</div>
+          <div class="stamp" style="--c:${c}">${initials(m.destinatario_nome)}</div>
+        </div>
+        <div class="card-face card-back">
+          <p>${escapeHTML(m.mensagem)}</p>
+          <div class="from">— ${m.anonimo ? 'Anônimo' : escapeHTML(m.remetente_nome)}</div>
+        </div>
+      </div>`;
+    card.addEventListener('click', ()=> card.classList.toggle('flipped'));
+    grid.appendChild(card);
+  });
+}
+function escapeHTML(s){ const d=document.createElement('div'); d.textContent = s||''; return d.innerHTML; }
+
+/* ===================== ENVIAR ===================== */
+const composeForm = document.getElementById('composeForm');
+const mensagemEl = document.getElementById('fMensagem');
+mensagemEl.addEventListener('input', ()=> document.getElementById('charCount').textContent = mensagemEl.value.length);
+
+let selectedColor = 'dourado';
+document.querySelectorAll('#swatches .swatch').forEach(s=>{
+  s.addEventListener('click', ()=>{
+    document.querySelectorAll('#swatches .swatch').forEach(x=>x.classList.remove('sel'));
+    s.classList.add('sel'); selectedColor = s.dataset.c;
+    const hex = colorMap[selectedColor];
+    document.getElementById('previewEnv').style.setProperty('--c', hex);
+  });
+});
+
+let anonOn = false, pubOn = true;
+document.getElementById('anonSwitch').addEventListener('click', function(){ anonOn=!anonOn; this.classList.toggle('on', anonOn); });
+document.getElementById('publicSwitch').addEventListener('click', function(){ pubOn=!pubOn; this.classList.toggle('on', pubOn); });
+
+document.getElementById('previewEnv').addEventListener('click', function(){ this.classList.toggle('open'); });
+
+composeForm.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const payload = {
+    remetente_nome: document.getElementById('fRemetenteNome').value.trim(),
+    remetente_turma: document.getElementById('fRemetenteTurma').value.trim(),
+    destinatario_nome: document.getElementById('fDestNome').value.trim(),
+    destinatario_turma: document.getElementById('fDestTurma').value.trim(),
+    mensagem: mensagemEl.value.trim(),
+    anonimo: anonOn,
+    envelope_estilo: selectedColor,
+    publica: pubOn
+  };
+  if(!payload.remetente_nome || !payload.destinatario_nome || !payload.mensagem){
+    toast('Preencha nome, destinatário e mensagem', 'err'); return;
+  }
+  btn.classList.add('sending'); btn.textContent = 'Selando…';
+  try{
+    await DB.add(payload);
+    confettiBurst();
+    toast('Bilhete enviado! Ele passará por moderação antes de aparecer no mural.');
+    composeForm.reset();
+    document.getElementById('charCount').textContent = '0';
+    anonOn=false; pubOn=true;
+    document.getElementById('anonSwitch').classList.remove('on');
+    document.getElementById('publicSwitch').classList.add('on');
+    const id = getIdentity();
+    if(id){ document.getElementById('fRemetenteNome').value = id.nome; document.getElementById('fRemetenteTurma').value = id.turma||''; }
+  }catch(err){
+    console.error(err);
+    toast('Não foi possível enviar. Tente novamente.', 'err');
+  }
+  btn.classList.remove('sending'); btn.innerHTML = '🖋️ Selar e enviar';
+});
+
+/* ===================== MINHA CAIXA ===================== */
+window.loadInbox = async function(){
+  const nome = document.getElementById('lookupNome').value.trim();
+  const turma = document.getElementById('lookupTurma').value.trim();
+  const list = document.getElementById('inboxList');
+  if(!nome){ list.innerHTML = '<div class="empty" style="padding:30px;"><div class="glyph">📭</div>Digite seu nome para buscar seus recados.</div>'; return; }
+  list.innerHTML = '<div class="empty" style="padding:30px;">⏳ Buscando…</div>';
+  try{
+    const data = await DB.listForRecipient(nome, turma);
+    if(!data.length){ list.innerHTML = '<div class="empty" style="padding:30px;"><div class="glyph">📭</div>Nada por aqui ainda. Volte mais tarde!</div>'; return; }
+    list.innerHTML = '';
+    data.forEach(m=>{
+      const c = colorMap[m.envelope_estilo] || colorMap.dourado;
+      const item = document.createElement('div');
+      item.className = 'glass letter-item';
+      item.innerHTML = `
+        <div class="dot" style="background:${c}"></div>
+        <div class="body">
+          <div class="top"><span>De ${m.anonimo ? 'Anônimo' : escapeHTML(m.remetente_nome)}</span><span>${new Date(m.criado_em).toLocaleDateString('pt-BR')}</span></div>
+          <p>${escapeHTML(m.mensagem)}</p>
+        </div>`;
+      item.addEventListener('click', ()=> item.classList.toggle('open'));
+      list.appendChild(item);
+    });
+  }catch(e){ list.innerHTML = '<div class="empty" style="padding:30px;">⚠ Erro ao buscar recados.</div>'; }
+};
+
+/* ===================== ADMIN ===================== */
+let adminAuthed = false;
+let adminData = [];
+let adminStatusFilter = 'todos';
+
+window.tryAdminLogin = function(){
+  const pass = document.getElementById('adminPass').value;
+  const expected = CFG.adminPass || '11orteip';
+  if(pass === expected){
+    adminAuthed = true;
+    document.getElementById('adminGate').style.display='none';
+    document.getElementById('adminPanel').style.display='block';
+    renderAdmin();
+  } else {
+    toast('Senha incorreta', 'err');
+  }
+};
+window.adminLogout = function(){
+  adminAuthed = false;
+  document.getElementById('adminGate').style.display='block';
+  document.getElementById('adminPanel').style.display='none';
+  document.getElementById('adminPass').value='';
+};
+
+document.querySelectorAll('#adminFilterChips .chip').forEach(c=>{
+  c.addEventListener('click', ()=>{
+    document.querySelectorAll('#adminFilterChips .chip').forEach(x=>x.classList.remove('active'));
+    c.classList.add('active'); adminStatusFilter = c.dataset.status; paintAdmin();
+  });
+});
+document.getElementById('adminSearch').addEventListener('input', paintAdmin);
+
+async function renderAdmin(){
+  document.getElementById('adminTbody').innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--ink-faint);padding:26px;">Carregando…</td></tr>';
+  try{ adminData = await DB.listAll(); }catch(e){ adminData = []; toast('Erro ao carregar mensagens', 'err'); }
+  paintStats();
+  paintAdmin();
+  prefillConfigForm();
+}
+function paintStats(){
+  const total = adminData.length;
+  const pend = adminData.filter(m=>m.status==='pendente').length;
+  const apr = adminData.filter(m=>m.status==='aprovada').length;
+  const rej = adminData.filter(m=>m.status==='rejeitada').length;
+  document.getElementById('statRow').innerHTML = [
+    ['Total', total], ['Pendentes', pend], ['Aprovadas', apr], ['Rejeitadas', rej]
+  ].map(([l,n])=>`<div class="glass stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+}
+function paintAdmin(){
+  const search = (document.getElementById('adminSearch').value||'').toLowerCase();
+  let data = adminData;
+  if(adminStatusFilter!=='todos') data = data.filter(m=>m.status===adminStatusFilter);
+  if(search) data = data.filter(m => (m.remetente_nome+m.destinatario_nome).toLowerCase().includes(search));
+  const tbody = document.getElementById('adminTbody');
+  if(!data.length){ tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--ink-faint);padding:26px;">Nenhuma mensagem encontrada.</td></tr>'; return; }
+  tbody.innerHTML = data.map(m=>`
+    <tr>
+      <td>${new Date(m.criado_em).toLocaleDateString('pt-BR')}<br><span style="color:var(--ink-faint);font-size:.72rem;">${new Date(m.criado_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</span></td>
+      <td>${m.anonimo? '<em>Anônimo</em>' : escapeHTML(m.remetente_nome)}${m.remetente_turma? '<br><span style="color:var(--ink-faint);font-size:.72rem;">'+escapeHTML(m.remetente_turma)+'</span>':''}</td>
+      <td>${escapeHTML(m.destinatario_nome)}${m.destinatario_turma? '<br><span style="color:var(--ink-faint);font-size:.72rem;">'+escapeHTML(m.destinatario_turma)+'</span>':''}</td>
+      <td class="msgpeek">${escapeHTML((m.mensagem||'').slice(0,90))}${(m.mensagem||'').length>90?'…':''}</td>
+      <td><span class="badge ${m.status}">${m.status}</span></td>
+      <td>
+        <div class="rowbtns">
+          <button class="iconbtn" title="Aprovar" onclick="adminSetStatus('${m.id}','aprovada')">✓</button>
+          <button class="iconbtn" title="Rejeitar" onclick="adminSetStatus('${m.id}','rejeitada')">✕</button>
+          <button class="iconbtn" title="Excluir" onclick="adminDelete('${m.id}')">🗑</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+window.adminSetStatus = async function(id, status){
+  try{ await DB.updateStatus(id, status); toast('Status atualizado'); renderAdmin(); }
+  catch(e){ toast('Erro ao atualizar', 'err'); }
+};
+window.adminDelete = async function(id){
+  try{ await DB.remove(id); toast('Mensagem excluída'); renderAdmin(); }
+  catch(e){ toast('Erro ao excluir', 'err'); }
+};
+
+/* ===================== CONFIG ===================== */
+function prefillConfigForm(){
+  document.getElementById('cfgSchoolName').value = CFG.schoolName || '';
+  document.getElementById('cfgUrl').value = CFG.url || '';
+  document.getElementById('cfgKey').value = CFG.key || '';
+  document.getElementById('cfgPass').value = CFG.adminPass || '';
+}
+window.saveConfig = async function(){
+  CFG = {
+    schoolName: document.getElementById('cfgSchoolName').value.trim(),
+    url: document.getElementById('cfgUrl').value.trim(),
+    key: document.getElementById('cfgKey').value.trim(),
+    adminPass: document.getElementById('cfgPass').value.trim() || '11orteip'
+  };
+  localStorage.setItem(LS_CFG, JSON.stringify(CFG));
+  applySchoolName();
+  toast('Configuração salva. Conectando…');
+  await initSupabase();
+  renderMural();
+  if(adminAuthed) renderAdmin();
+};
+window.clearConfig = function(){
+  const keep = { schoolName: CFG.schoolName, adminPass: CFG.adminPass };
+  CFG = keep;
+  localStorage.setItem(LS_CFG, JSON.stringify(CFG));
+  supabase = null; LIVE = false;
+  updateModeTag();
+  prefillConfigForm();
+  toast('Voltou ao modo demonstração local');
+  renderMural();
+  if(adminAuthed) renderAdmin();
+};
+function applySchoolName(){
+  const name = CFG.schoolName || 'Nossa Escola';
+  document.getElementById('schoolNameTag').textContent = name;
+}
+
+document.getElementById('sqlBlock').textContent =
+`create extension if not exists pgcrypto;
+
+create table mensagens (
+  id uuid primary key default gen_random_uuid(),
+  criado_em timestamptz default now(),
+  remetente_nome text not null,
+  remetente_turma text,
+  destinatario_nome text not null,
+  destinatario_turma text,
+  mensagem text not null,
+  anonimo boolean default false,
+  envelope_estilo text default 'dourado',
+  status text default 'pendente',
+  publica boolean default true
+);
+
+alter table mensagens enable row level security;
+
+-- qualquer visitante pode enviar um bilhete
+create policy "insercao_publica" on mensagens
+  for insert with check (true);
+
+-- qualquer visitante pode ler (o app filtra por status/destinatário)
+create policy "leitura_publica" on mensagens
+  for select using (true);
+
+-- em produção, restrinja update/delete a um usuário autenticado (admin),
+-- por exemplo usando Supabase Auth + checar auth.uid() numa tabela de admins.
+create policy "atualizacao_demo" on mensagens
+  for update using (true);
+
+create policy "exclusao_demo" on mensagens
+  for delete using (true);`;
+
+/* ===================== BOOT ===================== */
+(async function boot(){
+  refreshIdentityPill();
+  applySchoolName();
+  const id = getIdentity();
+  if(id){
+    document.getElementById('fRemetenteNome').value = id.nome;
+    document.getElementById('fRemetenteTurma').value = id.turma||'';
+    document.getElementById('lookupNome').value = id.nome;
+    document.getElementById('lookupTurma').value = id.turma||'';
+  } else {
+    setTimeout(()=> document.getElementById('identityOverlay').classList.add('show'), 700);
+  }
+  await initSupabase();
+  renderMural();
+})();
+</script>
+</body>
+</html>
